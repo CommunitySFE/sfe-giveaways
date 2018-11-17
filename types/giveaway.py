@@ -8,7 +8,8 @@ class Giveaway(DatabaseObject):
 
     active = False
     name = "unnamed giveaway"
-    ends = time.ctime()
+    autopick = False
+    autopick_time = None
     pick_random = False
     giveaway_type = "base"
 

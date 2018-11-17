@@ -1,7 +1,8 @@
 
+
 class DatabaseObject:
 
-    # TODO eventually add a to_database_object
+    mongodb_id = None
 
     @classmethod
     def from_database_object(cls, database_obj):
@@ -10,6 +11,8 @@ class DatabaseObject:
         """
         obj = cls()
         for key, value in database_obj.items():
+            if key == "_id":
+                key = "mongodb_id"
             if hasattr(obj, key):
                 setattr(obj, key, value)
         return obj
@@ -19,6 +22,10 @@ class DatabaseObject:
     def to_database_object(cls):
         """
         Returns the DatabaseObject as a dictionary.
+
+        This excludes the mongodb_id object.
         """
-        return vars(cls)
+        database_object = dict(vars(cls))
+        del database_object["mongodb_id"]
+        return database_object
     
