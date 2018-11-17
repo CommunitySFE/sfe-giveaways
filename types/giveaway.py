@@ -1,22 +1,21 @@
+from types.database import DatabaseObject
 import time
 
-class Giveaway:
+class Giveaway(DatabaseObject):
+    """
+    Base class for giveaways
+    """
 
     active = False
     name = "unnamed giveaway"
     ends = time.ctime()
+    pick_random = False
+    giveaway_type = "base"
 
-    @classmethod
-    def from_database_object(cls, database_obj):
-        """
-        Returns a Giveaway object directly from a MongoDB data object.
 
-        All values beginning with "_" are ignored.
-        """
-        obj = cls()
-        for key, value in database_obj:
-            if key.startswith("_"):
-                continue
-            if hasattr(obj, key):
-                setattr(obj, value)
-        return obj
+class MessagesGiveaway(Giveaway):
+
+    messages_required = 100
+    giveaway_type = "message"
+
+    

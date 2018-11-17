@@ -1,0 +1,13 @@
+{
+    "token": "<your token>",
+    "bot": {
+        "commands_level_getter": "plugins.permissions.CommandLevelGetter",
+        "commands_prefix": "!giveaway ",
+        "commands_require_prefix": false,
+        "commands_allow_edit": true,
+        "plugins": [
+            "plugins.base",
+            "plugins.messages"
+        ]
+    }
+}
