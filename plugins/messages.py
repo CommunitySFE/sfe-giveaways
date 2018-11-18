@@ -1,6 +1,7 @@
 from disco.bot import Plugin, Config
-from types.giveaway import MessagesGiveaway
-from types.participant import MessagesParticipant
+from structures.giveaway import MessagesGiveaway
+from structures.participant import MessagesParticipant
+
 
 class MessagesConfig(Config):
 
@@ -8,6 +9,7 @@ class MessagesConfig(Config):
     staff_role_id = 360463652429496330
 
     blacklisted_channels = []
+
 
 class MessagesPlugin(Plugin):
 
@@ -23,16 +25,19 @@ class MessagesPlugin(Plugin):
         if event.message.guild is None:
             return
         
-        if event.message.guild.id != self.config.master_guild_id:
+        if event.message.guild.id != self.config["master_guild_id"]:
             return
         
-        if event.channel.message.id in self.config.blacklisted_channels:
+        if event.message.channel.id in self.config["blacklisted_channels"]:
+            return
+
+        if event.message.author.bot:
             return
         
         for handler in self.handlers:
             handler(event.message)
         
-        if self.config.staff_role_id in event.message.member.roles:
+        if self.config["staff_role_id"] in event.message.member.roles:
             for staff_handler in self.staff_handlers:
                 staff_handler(event.message)
     
@@ -52,21 +57,29 @@ class MessagesPlugin(Plugin):
     
     def giveaway_message_handler(self, message):
         base = self.bot.plugins["BasePlugin"]
-        giveaways = base.get_giveaways(active=True, giveaway_type="message")
+        giveaways = base.get_giveaways(MessagesGiveaway, active=True, giveaway_type="message")
         for giveaway in giveaways:
-            participant_id, participant = base.get_participant(giveaway.name, message.author.id, MessagesParticipant)
+            participant_id, participant = base.get_participant(
+                giveaway.mongodb_id, message.author.id, MessagesParticipant
+            )
             if participant_id is None:
-                base.create_participant(user_id = message.author.id, message_count=1, blacklisted=False)
+                base.create_participant(
+                    MessagesParticipant,
+                    user_id=message.author.id,
+                    message_count=1,
+                    blacklisted=False,
+                    giveaway=giveaway.mongodb_id
+                )
                 return
             participant.message_count += 1
             if giveaway.messages_required <= participant.message_count:
                 participant.eligible = True
-            base.update_participant(participant_id, participant.to_database_object())
+            base.update_participant(participant_id, **participant.to_database_object())
     
     @Plugin.command("message", "<message_requirement:int> <name:str...>", group="new", level=100)
     def create_messages_giveaway(self, event, message_requirement, name):
         base = self.bot.plugins["BasePlugin"]
-        base.create_giveaway(MessagesGiveaway, name=name, messages_required=message_requirement)
+        base.create_giveaway(MessagesGiveaway, name=name, messages_required=message_requirement, active=True)
         event.msg.reply(":ok_hand: created giveaway `{giveaway_name}` with message goal of {message_goal}".format(
             giveaway_name=name,
             message_goal=str(message_requirement)

@@ -2,7 +2,8 @@
 
 class DatabaseObject:
 
-    mongodb_id = None
+    def __init__(self):
+        self.mongodb_id = None
 
     @classmethod
     def from_database_object(cls, database_obj):
@@ -17,15 +18,17 @@ class DatabaseObject:
                 setattr(obj, key, value)
         return obj
 
-
-    @classmethod
-    def to_database_object(cls):
+    def to_database_object(self):
         """
         Returns the DatabaseObject as a dictionary.
 
         This excludes the mongodb_id object.
         """
-        database_object = dict(vars(cls))
-        del database_object["mongodb_id"]
+        database_object = vars(self)
+        delete_keys = []
+        for key in database_object.keys():
+            if key.startswith("_") or key == "mongodb_id":
+                delete_keys.append(key)
+        for key in delete_keys:
+            del database_object[key]
         return database_object
-    
