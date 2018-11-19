@@ -11,7 +11,8 @@
             "plugins.messages",
             "plugins.permissions",
             "plugins.autopick",
-            "plugins.rewards"
+            "plugins.rewards",
+            "plugins.hugfight"
         ]
     }
 }
