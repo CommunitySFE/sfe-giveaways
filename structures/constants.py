@@ -1,11 +1,11 @@
 
 TIME_MEASUREMENTS = {
-    "seconds": 1000,
-    "minutes": 60000,
-    "hours": 3600000,
-    "days": 86400000,
-    "second": 1000,
-    "minute": 60000,
-    "hour": 3600000,
-    "day": 86400000
+    "seconds": 1,
+    "minutes": 60,
+    "hours": 3600,
+    "days": 86400,
+    "second": 1,
+    "minute": 60,
+    "hour": 3600,
+    "day": 86400
 }

@@ -9,7 +9,8 @@
         "plugins": [
             "plugins.base",
             "plugins.messages",
-            "plugins.permissions"
+            "plugins.permissions",
+            "plugins.autopick"
         ]
     }
 }
