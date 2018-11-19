@@ -223,6 +223,18 @@ class BasePlugin(Plugin):
             no_longer="no longer " if giveaway.active else ""
         ))
 
+    @Plugin.command("togglerandom", "<giveaway_name:str...>", group="giveaway", level=100)
+    def toggle_random(self, event, giveaway_name):
+        giveaway = self.get_giveaway(giveaway_name)
+        if giveaway is None:
+            event.msg.reply(":no_entry_sign: could not find giveaway.")
+            return
+        self.update_giveaway(giveaway.mongodb_id, pick_random=not giveaway.pick_random)
+        event.msg.reply(":ok_hand: {giveaway} is {no_longer}random".format(
+            giveaway=giveaway_name,
+            no_longer="no longer " if giveaway.pick_random else ""
+        ))
+
     @Plugin.command("cleanup", group="giveaway", level=100)
     def cleanup(self, event):
         inactive_giveaways = self.get_giveaways(Giveaway, active=False)
