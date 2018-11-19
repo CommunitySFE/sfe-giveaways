@@ -57,9 +57,3 @@ class AutopickPlugin(Plugin):
         ))
 
         base.update_giveaway(giveaway.mongodb_id, active=False)
-
-    @Plugin.command("forcescheduler", group="debug", level=100)
-    def debug_force_scheduler(self, event):
-        self.automatic_pick()
-        print(str(self.scheduler.queue))
-        event.msg.reply(":ok_hand: scheduler task has been run.")

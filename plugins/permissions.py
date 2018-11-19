@@ -6,8 +6,9 @@ from disco.bot.command import CommandLevels
 MASTER_GUILD_ID = 360462032811851777
 STAFF_GUILD_ID = 414250233493454862
 
-GIVEAWAY_ROLE_ID = 0
-STAFF_GIVEAWAY_ROLE_ID = 0
+GIVEAWAY_ROLE_ID = 514143013812043777
+STAFF_GIVEAWAY_ROLE_ID = 514141790790746122
+
 
 def get_level(bot, actor):
     global MASTER_GUILD_ID, STAFF_GUILD_ID, GIVEAWAY_ROLE_ID, STAFF_GIVEAWAY_ROLE_ID
@@ -25,6 +26,7 @@ def get_level(bot, actor):
         return CommandLevels.DEFAULT
     else:
         return CommandLevels.DEFAULT
+
 
 class PermissionsPluginConfig(Config):
     

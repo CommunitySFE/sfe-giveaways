@@ -10,7 +10,8 @@
             "plugins.base",
             "plugins.messages",
             "plugins.permissions",
-            "plugins.autopick"
+            "plugins.autopick",
+            "plugins.rewards"
         ]
     }
 }

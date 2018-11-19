@@ -22,7 +22,7 @@ class BasePluginConfig(Config):
     # Set to False in debug environments
     use_authentication = True
 
-    master_guild_id = 0
+    master_guild_id = 360462032811851777
 
 
 @Plugin.with_config(BasePluginConfig)
@@ -115,7 +115,19 @@ class BasePlugin(Plugin):
         for participant_obj in participant_objects:
             participants.append(Participant.from_database_object(participant_obj))
         return participants
-    
+
+    def get_staff_in_quota(self, quota_name, cls=Participant):
+        giveaway = self.get_giveaway(quota_name)
+        if giveaway is None:
+            return None
+        participant_objects = self.participants.find({
+            "giveaway": giveaway.mongodb_id
+        })
+        participants = []
+        for participant_obj in participant_objects:
+            participants.append(cls.from_database_object(participant_obj))
+        return participants
+
     def get_giveaway(self, giveaway_name):
         giveaway = self.giveaways.find_one({"name": giveaway_name})
         if giveaway is not None:
@@ -148,12 +160,12 @@ class BasePlugin(Plugin):
         else:
             raise GiveawayResultFailure("random mode isn't enabled on this giveaway.")
 
-    @Plugin.command("active", level=0)
+    @Plugin.command("active", group="giveaway", level=0)
     def active_giveaways(self, event):
         giveaways = self.get_all_giveaways()
         active_giveaways = []
         for giveaway in giveaways:
-            if giveaway.active:
+            if giveaway.active and giveaway.giveaway_type != "staff quota":
                 active_giveaways.append(giveaway)
         if len(active_giveaways) == 0:
             event.msg.reply(":no_entry_sign: there are no active giveaways at this time.")
@@ -169,7 +181,7 @@ class BasePlugin(Plugin):
             )
         event.msg.reply("Active giveaways:", embed=embed)
     
-    @Plugin.command("pick", "<giveaway_name:str...>", level=100)
+    @Plugin.command("pick", "<giveaway_name:str...>", group="giveaway", level=100)
     def command_pick_giveaway(self, event, giveaway_name):
         giveaway = self.get_giveaway(giveaway_name)
         if giveaway is None:
@@ -185,7 +197,7 @@ class BasePlugin(Plugin):
             giveaway=giveaway.name
         ))
     
-    @Plugin.command("autopick", "<time_value:int> <time_measurement:str> <giveaway_name:str...>", level=100)
+    @Plugin.command("autopick", "<time_value:int> <time_measurement:str> <giveaway_name:str...>", group="giveaway", level=100)
     def autopick_giveaway(self, event, time_value, time_measurement, giveaway_name):
         if not time_measurement.lower() in structures.constants.TIME_MEASUREMENTS:
             event.msg.reply(":no_entry_sign: unknown time measurement. use `seconds`, `minutes`, `hours`, or `days`.")
@@ -198,3 +210,27 @@ class BasePlugin(Plugin):
             return
         self.update_giveaway(giveaway.mongodb_id, autopick=True, autopick_time=pick_time)
         event.msg.reply(":ok_hand: giveaway winner will be automatically picked.")
+
+    @Plugin.command("toggleactive", "<giveaway_name:str...>", group="giveaway", level=100)
+    def toggle_active(self, event, giveaway_name):
+        giveaway = self.get_giveaway(giveaway_name)
+        if giveaway is None:
+            event.msg.reply(":no_entry_sign: could not find giveaway.")
+            return
+        self.update_giveaway(giveaway.mongodb_id, active=not giveaway.active)
+        event.msg.reply(":ok_hand: {giveaway} is {no_longer}active".format(
+            giveaway=giveaway_name,
+            no_longer="no longer " if giveaway.active else ""
+        ))
+
+    @Plugin.command("cleanup", group="giveaway", level=100)
+    def cleanup(self, event):
+        inactive_giveaways = self.get_giveaways(Giveaway, active=False)
+        for giveaway in inactive_giveaways:
+            self.participants.delete_many({
+                "giveaway": giveaway.mongodb_id
+            })
+            self.giveaways.delete_one({
+                "_id": giveaway.mongodb_id
+            })
+        event.msg.reply(":ok_hand: cleanup successful.")

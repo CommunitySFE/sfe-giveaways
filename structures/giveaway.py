@@ -22,3 +22,11 @@ class MessagesGiveaway(Giveaway):
         super().__init__()
         self.messages_required = 100
         self.giveaway_type = "message"
+
+
+class StaffQuota(Giveaway):
+
+    def __init__(self):
+        super().__init__()
+        self.giveaway_type = "staff quota"
+        self.messages_required = 750
