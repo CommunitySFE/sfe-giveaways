@@ -2,7 +2,7 @@ from disco.bot import Plugin, Config
 import random
 
 
-class HugFightConfig(Config):
+class ExtraPluginConfig(Config):
 
     hug_phrases = [
         "<@{a}> gave <@{b}> a big big hug!"
@@ -16,8 +16,8 @@ class HugFightConfig(Config):
     ]
 
 
-@Plugin.with_config(HugFightConfig)
-class HugFight(Plugin):
+@Plugin.with_config(ExtraPluginConfig)
+class ExtraPlugin(Plugin):
 
     @Plugin.command("hug", "<person:user>", level=0)
     def hug_command(self, event, person):
@@ -34,3 +34,11 @@ class HugFight(Plugin):
             a=str(event.msg.author.id),
             b=str(person.id)
         ))
+
+    @Plugin.command("source", level=0)
+    def open_source(self, event):
+        event.msg.reply("We are open-source! Go here to see the GitHub repo: https://github.com/brxxn/sfe-giveaways")
+
+    @Plugin.command("help", level=0)
+    def help(self, event):
+        event.msg.reply("List of Commands: https://github.com/brxxn/sfe-giveaways/wiki/Commands")

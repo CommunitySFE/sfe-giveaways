@@ -128,10 +128,10 @@ class BasePlugin(Plugin):
             participants.append(cls.from_database_object(participant_obj))
         return participants
 
-    def get_giveaway(self, giveaway_name):
+    def get_giveaway(self, giveaway_name, cls=Giveaway):
         giveaway = self.giveaways.find_one({"name": giveaway_name})
         if giveaway is not None:
-            giveaway = Giveaway.from_database_object(giveaway)
+            giveaway = cls.from_database_object(giveaway)
         return giveaway
     
     def create_giveaway(self, cls, **kwargs):

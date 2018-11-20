@@ -114,7 +114,7 @@ class MessagesPlugin(Plugin):
             message_goal=str(message_requirement)
         ))
 
-    @Plugin.command("quota", "<message_requirement:int>", group="giveaway new", level=100)
+    @Plugin.command("new", "<message_requirement:int>", group="quota", level=100)
     def create_new_quota(self, event, message_requirement):
         if event.msg.guild == self.config.master_guild_id:
             event.msg.reply(":no_entry_sign: this command must be done on the staff server.")
@@ -122,6 +122,9 @@ class MessagesPlugin(Plugin):
         base = self.bot.plugins["BasePlugin"]
         year = datetime.datetime.now().date().isocalendar()[0]
         week = datetime.datetime.now().date().isocalendar()[1]
+        is_sunday = (datetime.datetime.now().weekday() + 1) % 7
+        if is_sunday == 0:
+            week += 1
         quota_name = "{year}-{week}_staff-quota".format(
             year=year,
             week=week
@@ -129,13 +132,13 @@ class MessagesPlugin(Plugin):
         if base.get_giveaway(quota_name) is not None:
             event.msg.reply(":no_entry_sign: a quota was already made this week")
             return
-        base.create_giveaway(StaffQuota, name=quota_name, message_requirement=message_requirement, active=True)
+        base.create_giveaway(StaffQuota, name=quota_name, messages_required=message_requirement, active=True)
         event.msg.reply(":ok_hand: created quota named `{quota_name}` with message requirement {msg_req}".format(
             quota_name=quota_name,
             msg_req=message_requirement
         ))
 
-    @Plugin.command("checkquota", "<quota_name:str>", group="giveaway", level=100)
+    @Plugin.command("check", "<quota_name:str>", group="quota", level=100)
     def check_quota(self, event, quota_name):
         base = self.bot.plugins["BasePlugin"]
         moderators = base.get_staff_in_quota(quota_name, MessagesParticipant)
@@ -161,3 +164,42 @@ class MessagesPlugin(Plugin):
             quota_fail_embed.color = 0xff451c
 
         event.msg.reply("Quota check:", embed=quota_fail_embed)
+
+    @Plugin.command("progress", group="quota", level=0)
+    def quota_progress(self, event):
+        if self.config.staff_role_id not in event.msg.member.roles:
+            event.msg.reply(":no_entry_sign: you are not a staff member")
+            return
+
+        base = self.bot.plugins["BasePlugin"]
+        year = datetime.datetime.now().date().isocalendar()[0]
+        week = datetime.datetime.now().date().isocalendar()[1]
+        is_sunday = (datetime.datetime.now().weekday() + 1) % 7
+        if is_sunday == 0:
+            week += 1
+        quota_name = "{year}-{week}_staff-quota".format(
+            year=year,
+            week=week
+        )
+
+        quota = base.get_giveaway(quota_name, StaffQuota)
+
+        if quota is None:
+            event.msg.reply(":no_entry_sign: there is currently no quota this week.")
+            return
+
+        required = quota.messages_required
+        participant = base.get_participant(quota.mongodb_id, event.msg.author.id, MessagesParticipant)[1]
+
+        if participant is None:
+            event.msg.reply(":no_entry_sign: you simply do not exist (send a few messages so the bot "
+                            "can register you)")
+            return
+
+        messages = participant.message_count
+
+        event.msg.reply("{emote} you have **{messages}** / **{requirement}**".format(
+            emote=self.config.red_tick_emote if messages < required else self.config.green_tick_emote,
+            messages=str(messages),
+            requirement=str(required)
+        ))

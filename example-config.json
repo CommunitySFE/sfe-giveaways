@@ -2,7 +2,7 @@
     "token": "<your token>",
     "bot": {
         "commands_level_getter": "plugins.permissions.get_level",
-        "commands_prefix": "!giveaway ",
+        "commands_prefix": ".",
         "commands_require_mention": false,
         "commands_enabled": true,
         "commands_allow_edit": true,
@@ -12,7 +12,7 @@
             "plugins.permissions",
             "plugins.autopick",
             "plugins.rewards",
-            "plugins.hugfight"
+            "plugins.extra"
         ]
     }
 }
