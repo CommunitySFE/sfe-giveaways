@@ -1,5 +1,7 @@
 from disco.bot import Plugin, Config
+from disco.types.guild import GuildMember
 from disco.types.message import MessageEmbed
+from disco.api.http import APIException
 from structures.giveaway import MessagesGiveaway, StaffQuota
 from structures.participant import MessagesParticipant
 import datetime
@@ -165,9 +167,19 @@ class MessagesPlugin(Plugin):
 
         event.msg.reply("Quota check:", embed=quota_fail_embed)
 
-    @Plugin.command("progress", group="quota", level=0)
-    def quota_progress(self, event):
-        if self.config.staff_role_id not in event.msg.member.roles:
+    @Plugin.command("progress", "[staff:user]", group="quota", level=0)
+    def quota_progress(self, event, staff=None):
+        if staff is None:
+            staff = event.msg.member
+
+        if not isinstance(staff, GuildMember):
+            try:
+                staff = self.client.api.guilds_members_get(self.config.master_guild_id, staff.id)
+            except APIException:
+                event.msg.reply(":no_entry_sign: that person isn't on this server.")
+                return
+
+        if self.config.staff_role_id not in staff.roles:
             event.msg.reply(":no_entry_sign: you are not a staff member")
             return
 
@@ -189,7 +201,7 @@ class MessagesPlugin(Plugin):
             return
 
         required = quota.messages_required
-        participant = base.get_participant(quota.mongodb_id, event.msg.author.id, MessagesParticipant)[1]
+        participant = base.get_participant(quota.mongodb_id, staff.id, MessagesParticipant)[1]
 
         if participant is None:
             event.msg.reply(":no_entry_sign: you simply do not exist (send a few messages so the bot "
@@ -198,8 +210,9 @@ class MessagesPlugin(Plugin):
 
         messages = participant.message_count
 
-        event.msg.reply("{emote} you have **{messages}** / **{requirement}**".format(
+        event.msg.reply("{emote} {pronoun} have **{messages}** / **{requirement}**".format(
             emote=self.config.red_tick_emote if messages < required else self.config.green_tick_emote,
             messages=str(messages),
-            requirement=str(required)
+            requirement=str(required),
+            pronoun="you" if staff.id == event.msg.member.id else "they"
         ))
