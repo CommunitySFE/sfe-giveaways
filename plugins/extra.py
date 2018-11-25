@@ -42,3 +42,14 @@ class ExtraPlugin(Plugin):
     @Plugin.command("help", level=0)
     def help(self, event):
         event.msg.reply("List of Commands: https://github.com/brxxn/sfe-giveaways/wiki/Commands")
+
+    @Plugin.command("poptart", level=0, aliases=["cat"])
+    def poptart(self, event):
+        """This is the poptart command - Given to poptart for most messages in a giveaway."""
+        if event.author.id != 116757237262843906 \
+                and event.author.id != 390906358259777536 \
+                and event.author.id != 303502679089348608:
+            return
+
+        event.msg.delete()
+        event.msg.reply("**PSA: <@116757237262843906> is the coolest person here.**")
