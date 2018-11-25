@@ -171,10 +171,12 @@ class MessagesPlugin(Plugin):
             if len(quota_fail_embed.fields) == 0:
                 quota_fail_list.sort(key=quotaSort)
                 quota_fail_embed.description = "\n\n".join(quota_fail_list)
+                fail = len(quota_fail_list)
+            else:
+                fail = len(quota_fail_embed.fields)
             quota_fail_embed.title = "{red_emoji} {fail} staff failed the quota!".format(
                 red_emoji=self.config.red_tick_emote,
-                #fail=len(quota_fail_embed.fields)
-                fail=len(quota_fail_list)
+                fail=fail
             )
             quota_fail_embed.color = 0xff451c
 
