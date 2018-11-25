@@ -17,6 +17,9 @@ class MessagesConfig(Config):
     green_tick_emote = "<:GreenTick:0>"
     red_tick_emote = "<:RedTick:0>"
 
+import re
+def quotaSort(string_):
+    return [int(s) if s.isdigit() else s for s in re.split(r'(\d+)', string_) if s]
 
 @Plugin.with_config(MessagesConfig)
 class MessagesPlugin(Plugin):
@@ -147,21 +150,31 @@ class MessagesPlugin(Plugin):
         if moderators is None:
             event.msg.reply(":no_entry_sign: unknown quota.")
             return
+        quota_fail_list = []
         quota_fail_embed = MessageEmbed()
         for moderator in moderators:
             if not moderator.eligible:
-                quota_fail_embed.add_field(
-                    value="<@{id}>".format(id=moderator.user_id),
-                    name="Message count: {count}".format(count=moderator.message_count)
-                )
-        if len(quota_fail_embed.fields) == 0:
-            quota_fail_embed.title = "{green_emoji} no one failed their quota".format(
+                quota_fail_list.append("{count} - <@{id}>".format(id=moderator.user_id, count=moderator.message_count))
+        if len("\n\n".join(quota_fail_list)) > 2047:
+            for moderator in moderators:
+                if not moderator.eligible:
+                    quota_fail_embed.add_field(
+                        value="<@{id}>".format(id=moderator.user_id),
+                        name="Message count: {count}".format(count=moderator.message_count)
+                    )
+        if len(quota_fail_embed.fields) == 0 and len(quota_fail_list) == 0:
+            quota_fail_embed.title = "{green_emoji} All staff passed the quota!".format(
                 green_emoji=self.config.green_tick_emote
             )
             quota_fail_embed.color = 0x38ff48
         else:
-            quota_fail_embed.title = "{red_emoji} some staff failed their quota".format(
-                red_emoji=self.config.red_tick_emote
+            if len(quota_fail_embed.fields) == 0:
+                quota_fail_list.sort(key=quotaSort)
+                quota_fail_embed.description = "\n\n".join(quota_fail_list)
+            quota_fail_embed.title = "{red_emoji} {fail} staff failed the quota!".format(
+                red_emoji=self.config.red_tick_emote,
+                #fail=len(quota_fail_embed.fields)
+                fail=len(quota_fail_list)
             )
             quota_fail_embed.color = 0xff451c
 
