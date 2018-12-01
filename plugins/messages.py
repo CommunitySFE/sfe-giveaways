@@ -182,7 +182,7 @@ class MessagesPlugin(Plugin):
 
         event.msg.reply("Quota check:", embed=quota_fail_embed)
 
-    @Plugin.command("progress", "[staff:user]", group="quota", level=0)
+    @Plugin.command("progress", "[staff:user]", group="quota", level=100)
     def quota_progress(self, event, staff=None):
         if staff is None:
             staff = event.msg.member
