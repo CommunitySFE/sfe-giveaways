@@ -246,3 +246,52 @@ class BasePlugin(Plugin):
                 "_id": giveaway.mongodb_id
             })
         event.msg.reply(":ok_hand: cleanup successful.")
+
+    @Plugin.command("blacklist", "<blacklist_user:user> [giveaway_name:str...]", group="giveaway", level=100)
+    def blacklist_user(self, event, blacklist_user, giveaway_name="all"):
+        # Get giveaway
+        giveaways = []
+        blacklist_all = True
+
+        if giveaway_name.lower() == "all":
+            giveaways = [giveaway for giveaway in self.get_giveaways(Giveaway, active=True)]
+        else:
+            giveaway = self.get_giveaway(giveaway_name)
+            if giveaway is None:
+                event.msg.reply(":no_entry_sign: could not find that giveaway.")
+                return
+            blacklist_all = False
+            giveaways.append(giveaway)
+
+        if len(giveaways) == 0:
+            event.msg.reply(":no_entry_sign: no giveaways could be found that matched your parameters.")
+            return
+
+        should_blacklist = False
+
+        # Get and check giveaway participant
+        for giveaway in giveaways:
+            participant_id, participant = self.get_participant(giveaway.mongodb_id, blacklist_user.id, Participant)
+
+            if participant is None:
+                if not blacklist_all:
+                    event.msg.reply(":no_entry_sign: that user hasn't participated in the giveaway.")
+                    return
+                break
+
+            # Toggle blacklist
+            should_blacklist = not participant.blacklisted
+
+            participant.blacklisted = should_blacklist
+
+            self.update_participant(participant.mongodb_id, blacklisted=should_blacklist)
+            del participant, participant_id
+
+        # Reply to command.
+        event.msg.reply(":ok_hand: {user} is {no_longer}blacklisted".format(
+            user=str(blacklist_user),
+            no_longer="" if should_blacklist else "no longer "
+        ))
+
+        del should_blacklist
+
