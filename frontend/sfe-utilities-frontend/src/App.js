@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PageNotFoundPage from './pages/404.js';
+import { Component } from 'react';
+import Routes from './routes'
 import './App.css';
 
 class App extends Component {
@@ -8,13 +8,14 @@ class App extends Component {
   }
 
   getPageForRoute(route){
-    if (route === "/") {
-      return (<div className="mainbody mx-3 my-3">
-          <h1>Server Dashboard</h1>
-        </div>);
-    } else {
-      return (new PageNotFoundPage()).render();
+    for (var r in Routes){
+      console.log(JSON.stringify(r))
+      if (route === Routes[r].location && Routes[r].component){
+        return Routes[r].component.render()
+      }
     }
+    
+    return Routes.PAGE_NOT_FOUND.component.render();
   }
 }
 
