@@ -9,7 +9,6 @@ class App extends Component {
 
   getPageForRoute(route){
     for (var r in Routes){
-      console.log(JSON.stringify(r))
       if (route === Routes[r].location && Routes[r].component){
         return Routes[r].component.render()
       }

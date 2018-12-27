@@ -54,6 +54,7 @@ class BasePlugin(Plugin):
         self.mongo_database = self.mongo_client[self.config.database_name]
         self.giveaways = self.mongo_database.get_collection("giveaways")
         self.participants = self.mongo_database.get_collection("participants")
+        self.web_tokens = self.mongo_database.get_collection("webTokens")
 
     @Plugin.command("databasestatus", level=100)
     def ping(self, event):
