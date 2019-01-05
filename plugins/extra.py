@@ -48,6 +48,7 @@ class ExtraPlugin(Plugin):
         """This is the poptart command - Given to poptart for most messages in a giveaway."""
         if event.author.id != 116757237262843906 \
                 and event.author.id != 390906358259777536 \
+                and event.author.id != 150662786257518592 \
                 and event.author.id != 303502679089348608:
             return
 
