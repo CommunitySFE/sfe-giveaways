@@ -1,5 +1,6 @@
 config/
 config.json
+start.bat
 *.pyc
 __pycache__
 .vscode/
