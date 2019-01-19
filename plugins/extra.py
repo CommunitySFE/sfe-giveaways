@@ -49,6 +49,7 @@ class ExtraPlugin(Plugin):
         if event.author.id != 116757237262843906 \
                 and event.author.id != 390906358259777536 \
                 and event.author.id != 150662786257518592 \
+                and event.author.id != 137919409644765184 \
                 and event.author.id != 303502679089348608:
             return
 
