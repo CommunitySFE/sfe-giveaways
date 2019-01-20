@@ -6,11 +6,14 @@ class ExtraPluginConfig(Config):
         
     cat_ids = [
         116757237262843906,
-        390906358259777536,
-        150662786257518592,
         137919409644765184,
-        303502679089348608
+        150662786257518592,
+        210118905006522369,
+        303502679089348608,
+        390906358259777536
     ]
+
+    cat_should_ping = True
     
     hug_phrases = [
         "<@{a}> gave <@{b}> a big big hug!"
@@ -51,11 +54,28 @@ class ExtraPlugin(Plugin):
     def help(self, event):
         event.msg.reply("List of Commands: https://github.com/brxxn/sfe-giveaways/wiki/Commands")
 
-    @Plugin.command("poptart", level=0, aliases=["cat"])
-    def poptart(self, event):
+    @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
+    def poptart(self, event, ping=None):
         """This is the poptart command - Given to poptart for most messages in a giveaway."""
+        
+        if ping and event.author.id == 116757237262843906:
+            if ping == 0:
+                self.config.cat_should_ping = False
+                event.msg.reply(":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
+            else if ping == 1:
+                self.config.cat_should_ping = True
+                event.msg.reply(":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
+            else:
+                return event.msg.reply(":negative_squared_cross_mark: Expecting 0-1.")
+        else:
+            return
+        
         if event.author.id not in self.config.cat_ids:
             return
 
         event.msg.delete()
-        event.msg.reply("**PSA: <@116757237262843906> is the coolest person here.**")
+        
+        if self.config.cat_should_ping:
+            event.msg.reply("**PSA: <@116757237262843906> is the coolest person here.**")
+        else:
+            event.msg.reply("**PSA: Cat is the coolest person here.**")
