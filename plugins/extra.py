@@ -62,7 +62,7 @@ class ExtraPlugin(Plugin):
             if ping == 0:
                 self.config.cat_should_ping = False
                 event.msg.reply(":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
-            else if ping == 1:
+            elif ping == 1:
                 self.config.cat_should_ping = True
                 event.msg.reply(":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
             else:
