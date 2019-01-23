@@ -5,12 +5,12 @@ import random
 class ExtraPluginConfig(Config):
         
     cat_ids = [
-        116757237262843906,
-        137919409644765184,
-        150662786257518592,
-        210118905006522369,
-        303502679089348608,
-        390906358259777536
+        116757237262843906, #Poptart
+        137919409644765184, #Jess
+        150662786257518592, #Zach
+        210118905006522369, #Ori 
+        303502679089348608, #1A3
+        390906358259777536  #CustomName
     ]
 
     cat_should_ping = True
@@ -59,14 +59,18 @@ class ExtraPlugin(Plugin):
         """This is the poptart command - Given to poptart for most messages in a giveaway."""
         
         if ping and event.author.id == 116757237262843906:
-            if ping == 0:
+            if ping == 1:
+                event.msg.delete()
                 self.config.cat_should_ping = False
                 event.msg.reply(":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
-            elif ping == 1:
+                return
+            elif ping == 2:
+                event.msg.delete()
                 self.config.cat_should_ping = True
                 event.msg.reply(":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
+                return
             else:
-                return event.msg.reply(":negative_squared_cross_mark: Expecting 0-1.")
+                return event.msg.reply(":negative_squared_cross_mark: Expecting 1-2.")
         
         if event.author.id not in self.config.cat_ids:
             return
