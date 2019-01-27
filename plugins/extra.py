@@ -54,18 +54,18 @@ class ExtraPlugin(Plugin):
     def help(self, event):
         event.msg.reply("List of Commands: https://github.com/brxxn/sfe-giveaways/wiki/Commands")
 
-    @Plugin.command("nick", "[nick:string...] [member:snowflake]", level=0, aliases=["nickname", "name"])
-        def nick(self, event, nick, user):
-            """Nickname command, as requested by Colin"""
-            if nick and member:
-                member.change_nickname(member, nick)
-                return event.msg.reply(":ok_hand: You changed <@{a}>'s nickname to `{b}`.".format(a=member.id, b=nick))
-            elif nick:
-                event.member.change_nickname(event.member, nick)
-                return event.msg.reply(":ok_hand: You changed your nickname to `{a}`.".format(a=nick))
-            else:
-                event.member.change_nickname(event.member, None)
-                return event.msg.reply(":ok_hand: Removed your nickname.".format(a=nick))
+    # @Plugin.command("nick", "[nick:string...] [member:snowflake]", level=0, aliases=["nickname", "name"])
+    # def nick(self, event, nick, user):
+    #     """Nickname command, as requested by Colin"""
+    #     if nick and member:
+    #         member.change_nickname(member, nick)
+    #         return event.msg.reply(":ok_hand: You changed <@{a}>'s nickname to `{b}`.".format(a=member.id, b=nick))
+    #     elif nick:
+    #         event.member.change_nickname(event.member, nick)
+    #         return event.msg.reply(":ok_hand: You changed your nickname to `{a}`.".format(a=nick))
+    #     else:
+    #         event.member.change_nickname(event.member, None)
+    #         return event.msg.reply(":ok_hand: Removed your nickname.".format(a=nick))
 
     @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
     def poptart(self, event, ping=None):
