@@ -35,8 +35,7 @@ class ExtraPluginConfig(Config):
         "Dabbit dabbed on <@{b}> from a request by <@{a}>!",
         "CustomName banned <@{a}> for picking a fight with <@{b}>!",
         "<@{a}> joined the game.\n<@{a}>: That's not very cash money of you.\n<@{b}>: What\nCONSOLE: <@{b}> was banned by an operator.\n<@{b}> left the game.",
-        "<@{b}> tied <@{a}>’s shoelaces together, causing them to fall over.",
-        ""
+        "<@{b}> tied <@{a}>’s shoelaces together, causing them to fall over."
     ]
 
 
