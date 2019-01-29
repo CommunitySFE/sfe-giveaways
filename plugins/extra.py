@@ -17,17 +17,17 @@ class ExtraPluginConfig(Config):
     
     hug_phrases = [
         "<@{a}> gave <@{b}> a big big hug!",
-        "With a great big hug  from <@{a}>\nand a gift from me to you\nWon't you say you love me too <@{b}>?",
+        "With a great big hug from <@{a}>\nand a gift from me to you\nWon't you say you love me too <@{b}>?",
         "<@{a}> dabbed on <@{b}> haters and gave them a hug.",
         "<@{b}> unexpectedly received a big hug from <@{a}>",
-        "<@{a}> Reached out their arms, wrapped them around <@{b}>  and gave them a giant hug!"
+        "<@{a}> Reached out their arms, wrapped them around <@{b}> and gave them a giant hug!"
     ]
     fight_phrases = [
         "<@{a}> fought with <@{b}> with a large fish.",
-        "<@{a}> tried to fight <@{b}>, but it wasn't very effective",
+        "<@{a}> tried to fight <@{b}>, but it wasn't very effective!",
         "<@{a}> fought <@{b}>, but they missed.",
-        "<@{a}> fought <@{b}> with a piece of toast",
-        "<@{a}> and <@{b}> are fighting with a pillow",
+        "<@{a}> fought <@{b}> with a piece of toast.",
+        "<@{a}> and <@{b}> are fighting with a pillow.",
         "<@{a}> aimed but missed <@{b}> by an inch.",
         "<@{b}> got duck slapped by <@{a}>",
         "<@{a}> tried to dab on <@{b}> but they tripped, fell over, and now they need @ someone",
@@ -35,7 +35,9 @@ class ExtraPluginConfig(Config):
         "Dabbit dabbed on <@{b}> from a request by <@{a}>!",
         "CustomName banned <@{a}> for picking a fight with <@{b}>!",
         "<@{a}> joined the game.\n<@{a}>: That's not very cash money of you.\n<@{b}>: What\nCONSOLE: <@{b}> was banned by an operator.\n<@{b}> left the game.",
-        "<@{b}> tied <@{a}>’s shoelaces together, causing them to fall over."
+        "<@{b}> tied <@{a}>’s shoelaces together, causing them to fall over.",
+        "You are the Chosen One <@{a}>. You have brought balance to this world. Stay on this path, and you will do it again for the galaxy. But beware your heart said master <@{b}>",
+        "<@{a}> used 'chat flood'. It wasn't very effective, so <@{b}> muted them."
     ]
 
 
