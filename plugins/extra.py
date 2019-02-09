@@ -87,7 +87,7 @@ class ExtraPlugin(Plugin):
     def pat(self, event, fluff=None):
         pat_count = self.config.pat_records.get(event.author.id)
         event.msg.delete()
-        event.msg.reply("<@210118905006522369> is a bad developer and can't access the logs so he doesn't even know what's wrong lmao.")
+        # event.msg.reply("<@210118905006522369> is a bad developer and can't access the logs so he doesn't even know what's wrong lmao.")
         if not pat_count:
             self.config.pat_records[event.author.id] = 1
         else:
@@ -95,7 +95,7 @@ class ExtraPlugin(Plugin):
 
         if not fluff or fluff.id == "210118905006522369":
             return event.msg.reply(
-                "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat for the `<@{b}}!` time!"
+                "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat for the `{b}` time!"
                     .format(a=event.author.id, b=self.config.pat_ori_record)
             ) 
         else:
@@ -104,7 +104,7 @@ class ExtraPlugin(Plugin):
                 pat_amount = 0
 
             return event.msg.reply(
-                "<@{a}> gave <@{b}>, a pat for the `<@{c}}!` time!"
+                "<@{a}> gave <@{b}>, a pat for the `{c}` time!"
                     .format(a=event.author.id, b=fluff.id, c=pat_amount)
             )           
 
