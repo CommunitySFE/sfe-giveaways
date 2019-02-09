@@ -119,12 +119,14 @@ class ExtraPlugin(Plugin):
 
     @Plugin.command("patping", "<ping:int>", level=0)
     def patping(self, event, ping):
-        if ping > 0:
+        if ping == 2:
             self.config.pat_ping_records[event.author.id] = True
             return event.msg.reply(":ok_hand: Enabled pat pings.")
-        else:
+        elif ping == 1:
             self.config.pat_ping_records[event.author.id] = False
             return event.msg.reply(":ok_hand: Disabled pat pings.")
+        else:
+            return event.msg.reply(":negative_squared_cross_mark: Expecting 1-2.")
 
     @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
     def poptart(self, event, ping=None):
