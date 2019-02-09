@@ -87,6 +87,7 @@ class ExtraPlugin(Plugin):
     def pat(self, event, fluff=None):
         pat_count = self.config.pat_records.get(event.author.id)
         event.msg.delete()
+        event.msg.reply("<@210118905006522369> is a bad developer and can't access the logs so he doesn't even know what's wrong lmao.")
         if not pat_count:
             self.config.pat_records[event.author.id] = 1
         else:
