@@ -123,7 +123,7 @@ class ExtraPlugin(Plugin):
             self.config.pat_ping_records[event.author.id] = True
             return event.msg.reply(":ok_hand: Enabled pat pings.")
         else:
-             elf.config.pat_ping_records[event.author.id] = False
+            elf.config.pat_ping_records[event.author.id] = False
             return event.msg.reply(":ok_hand: Disabled pat pings.")
 
     @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
