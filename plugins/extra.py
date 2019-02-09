@@ -89,7 +89,7 @@ class ExtraPlugin(Plugin):
         pat_count = self.config.pat_records.get(event.author.id)
         event.msg.delete()
         if not pat_count:
-                self.config.pat_records[event.author.id] = 1
+            self.config.pat_records[event.author.id] = 1
         else:
             self.config.pat_records[event.author.id] += 1
         if not fluff or fluff.id == "210118905006522369":
