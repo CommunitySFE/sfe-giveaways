@@ -87,7 +87,7 @@ class ExtraPlugin(Plugin):
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
         pat_count = self.config.pat_records.get(event.author.id)
-        event.msg.delete()
+        # event.msg.delete()
         if not pat_count:
             self.config.pat_records[event.author.id] = 1
         else:
