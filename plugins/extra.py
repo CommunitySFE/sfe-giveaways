@@ -93,6 +93,10 @@ class ExtraPlugin(Plugin):
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat for the `{b}` time!"
                     .format(a=event.author.id, b=self.config.pat_ori_record)
             ) 
+        elif fluff.id == event.author.id:
+            return event.msg.reply(
+                ":negative_squared_cross_mark: You can't pat yourself, you fool."
+            )
         else:
             pat_amount = self.config.pat_records.get(fluff.id)
             if not pat_amount:
