@@ -42,6 +42,7 @@ class ExtraPluginConfig(Config):
 
     pat_ori_record = 0
     pat_records = {}
+    pat_ping_records = {}
 
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
@@ -104,23 +105,38 @@ class ExtraPlugin(Plugin):
                 self.config.pat_records[fluff.id] = 0
 
             self.config.pat_records[fluff.id] += 1
-            return event.msg.reply(
-                "<@{a}> gave <@{b}>, a pat for the `{c}` time!"
-                    .format(a=event.author.id, b=fluff.id, c=pat_amount)
-            )           
+
+            if self.config.pat_ping_records or self.config.pat_ping_records == None:
+                return event.msg.reply(
+                    "<@{a}> gave <@{b}>, a pat for the `{c}` time!"
+                        .format(a=event.author.id, b=fluff.id, c=pat_amount)
+                )
+            else:
+                return event.msg.reply(
+                    "<@{a}> gave {b}, a pat for the `{c}` time!"
+                        .format(a=event.author.id, b=fluff.tag, c=pat_amount)
+                )
+
+    @Plugin.command("patping", "<ping:int>", level=0)
+    def patping(self, event, ping):
+        if ping > 0:
+            self.config.pat_ping_records[event.author.id] = True
+            return event.msg.reply(":ok_hand: Enabled pat pings.")
+        else:
+             elf.config.pat_ping_records[event.author.id] = False
+            return event.msg.reply(":ok_hand: Disabled pat pings.")
 
     @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
     def poptart(self, event, ping=None):
         """This is the poptart command - Given to poptart for most messages in a giveaway."""
         
+        event.msg.delete()
         if ping and event.author.id == 116757237262843906:
             if ping == 1:
-                event.msg.delete()
                 self.config.cat_should_ping = False
                 event.msg.reply(":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
                 return
             elif ping == 2:
-                event.msg.delete()
                 self.config.cat_should_ping = True
                 event.msg.reply(":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
                 return
@@ -129,8 +145,6 @@ class ExtraPlugin(Plugin):
         
         if event.author.id not in self.config.cat_ids:
             return
-
-        event.msg.delete()
         
         if self.config.cat_should_ping:
             event.msg.reply("**PSA: <@116757237262843906> is the coolest person here.**")
