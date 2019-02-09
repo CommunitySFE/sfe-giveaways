@@ -106,7 +106,7 @@ class ExtraPlugin(Plugin):
 
             self.config.pat_records[fluff.id] += 1
 
-            if self.config.pat_ping_records or self.config.pat_ping_records == None:
+            if self.config.pat_ping_records.get(fluff.id) or self.config.pat_ping_records.get(fluff.id) == None:
                 return event.msg.reply(
                     "<@{a}> gave <@{b}>, a pat for the `{c}` time!"
                         .format(a=event.author.id, b=fluff.id, c=pat_amount)
