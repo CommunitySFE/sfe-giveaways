@@ -101,7 +101,7 @@ class ExtraPlugin(Plugin):
             return event.msg.reply(
                 "<@{a}> gave <@{b}>, a pat for the `<@{c}}!` time!"
                     .format(a=event.author.id, b=fluff.id, c=self.config.pat_records[fluff.id])
-        )
+            )
            
 
     @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
