@@ -20,7 +20,7 @@ class ExtraPluginConfig(Config):
         "With a great big hug from <@{a}>\nand a gift from me to you\nWon't you say you love me too <@{b}>?",
         "<@{a}> dabbed on <@{b}> haters and gave them a hug.",
         "<@{b}> unexpectedly received a big hug from <@{a}>",
-        "<@{a}> Reached out their arms, wrapped them around <@{b}> and gave them a giant hug!"
+        "<@{a}> reached out their arms, wrapped them around <@{b}> and gave them a giant hug!"
     ]
     fight_phrases = [
         "<@{a}> fought with <@{b}> with a large fish.",
