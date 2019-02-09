@@ -101,7 +101,7 @@ class ExtraPlugin(Plugin):
         else:
             pat_amount = self.config.pat_records.get(fluff.id)
             if not pat_amount:
-                pat_amount = 0
+                pat_amount = 1
                 self.config.pat_records[fluff.id] = 1
 
             self.config.pat_records[fluff.id] += 1
