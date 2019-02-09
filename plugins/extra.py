@@ -43,7 +43,6 @@ class ExtraPluginConfig(Config):
     pat_ori_record = 0
     pat_records = {}
 
-
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
 
@@ -87,11 +86,12 @@ class ExtraPlugin(Plugin):
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
         pat_count = self.config.pat_records.get(event.author.id)
-        # event.msg.delete()
+        event.msg.delete()
         if not pat_count:
             self.config.pat_records[event.author.id] = 1
         else:
             self.config.pat_records[event.author.id] += 1
+            
         if not fluff or fluff.id == "210118905006522369":
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat for the `<@{b}}!` time!"
@@ -101,8 +101,7 @@ class ExtraPlugin(Plugin):
             return event.msg.reply(
                 "<@{a}> gave <@{b}>, a pat for the `<@{c}}!` time!"
                     .format(a=event.author.id, b=fluff.id, c=self.config.pat_records[fluff.id])
-            )
-           
+            )           
 
     @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
     def poptart(self, event, ping=None):
