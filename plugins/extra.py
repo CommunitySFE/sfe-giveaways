@@ -85,15 +85,10 @@ class ExtraPlugin(Plugin):
 
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
-        pat_count = self.config.pat_records.get(event.author.id)
         event.msg.delete()
-        # event.msg.reply("<@210118905006522369> is a bad developer and can't access the logs so he doesn't even know what's wrong lmao.")
-        if not pat_count:
-            self.config.pat_records[event.author.id] = 1
-        else:
-            self.config.pat_records[event.author.id] += 1
 
         if not fluff or fluff.id == "210118905006522369":
+            self.config.pat_ori_record += 1
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat for the `{b}` time!"
                     .format(a=event.author.id, b=self.config.pat_ori_record)
@@ -102,7 +97,9 @@ class ExtraPlugin(Plugin):
             pat_amount = self.config.pat_records.get(fluff.id)
             if not pat_amount:
                 pat_amount = 0
+                self.config.pat_records[fluff.id] = 0
 
+            self.config.pat_records[fluff.id] += 1
             return event.msg.reply(
                 "<@{a}> gave <@{b}>, a pat for the `{c}` time!"
                     .format(a=event.author.id, b=fluff.id, c=pat_amount)
