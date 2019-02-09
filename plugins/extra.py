@@ -91,7 +91,7 @@ class ExtraPlugin(Plugin):
         if not fluff or fluff.id == "210118905006522369":
             self.config.pat_ori_record += 1
             return event.msg.reply(
-                "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat for the `{b}` time!"
+                "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
                     .format(a=event.author.id, b=self.config.pat_ori_record)
             ) 
         elif fluff.id == event.author.id:
@@ -108,12 +108,12 @@ class ExtraPlugin(Plugin):
 
             if self.config.pat_ping_records.get(fluff.id) or self.config.pat_ping_records.get(fluff.id) == None:
                 return event.msg.reply(
-                    "<@{a}> gave <@{b}>, a pat for the `{c}` time!"
+                    "<@{a}> gave <@{b}> a pat! (`{c}`)"
                         .format(a=event.author.id, b=fluff.id, c=pat_amount)
                 )
             else:
                 return event.msg.reply(
-                    "<@{a}> gave {b}, a pat for the `{c}` time!"
+                    "<@{a}> gave {b} a pat! (`{c}`)"
                         .format(a=event.author.id, b=fluff.tag, c=pat_amount)
                 )
 
