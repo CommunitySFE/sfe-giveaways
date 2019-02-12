@@ -20,5 +20,3 @@ sudo pip install -r requirements.txt # Install to all users
 ```
 
 **Database:** You'll need to install MongoDB, the database which we use here. The bot will not function properly without it. Configure it in config/config.json
-
-.
