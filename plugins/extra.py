@@ -88,7 +88,7 @@ class ExtraPlugin(Plugin):
     def pat(self, event, fluff=None):
         event.msg.delete()
 
-        if not fluff or fluff.id == "210118905006522369":
+        if not fluff or fluff.id == 210118905006522369:
             self.config.pat_ori_record += 1
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
