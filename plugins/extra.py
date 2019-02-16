@@ -40,7 +40,7 @@ class ExtraPluginConfig(Config):
         "<@{a}> used 'chat flood'. It wasn't very effective, so <@{b}> muted them."
     ]
 
-    pat_ori_record = 0
+    pat_ori_record = 4678
     pat_records = {}
     pat_ping_records = {}
 
