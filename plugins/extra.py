@@ -47,7 +47,7 @@ class ExtraPluginConfig(Config):
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
     
-    @Plugin.command("hug", "[person:user]", level=0)
+    @Plugin.command("hug", "<person:user>", level=0)
     def hug_command(self, event, person):
         event.msg.delete()
 
