@@ -53,12 +53,11 @@ class ExtraPlugin(Plugin):
 
         if not person or person.id == 210118905006522369:
             return event.msg.reply(
-                "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!"
-                    .format(a=event.author.id)
+                "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!".format(a=event.author.id)
             ) 
         else: 
             message = random.choice(self.config.hug_phrases)
-            event.msg.reply(message.format(
+            return event.msg.reply(message.format(
                 a=str(event.msg.author.id),
                 b=str(person.id)
             ))
@@ -96,7 +95,7 @@ class ExtraPlugin(Plugin):
     def pat(self, event, fluff=None):
         event.msg.delete()
 
-        if not fluff or fluff.id == "210118905006522369":
+        if not fluff or fluff.id == 210118905006522369:
             self.config.pat_ori_record += 1
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
