@@ -46,7 +46,7 @@ class ExtraPluginConfig(Config):
 
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
-
+    
     @Plugin.command("hug", "[person:user]", level=0)
     def hug_command(self, event, person):
         event.msg.delete()
@@ -54,7 +54,7 @@ class ExtraPlugin(Plugin):
         if not person or person.id == 210118905006522369:
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!"
-                    .format(a=event.author.id,)
+                    .format(a=event.author.id)
             ) 
         else: 
             message = random.choice(self.config.hug_phrases)
