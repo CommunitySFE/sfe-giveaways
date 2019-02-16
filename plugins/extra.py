@@ -47,14 +47,21 @@ class ExtraPluginConfig(Config):
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
 
-    @Plugin.command("hug", "<person:user>", level=0)
+    @Plugin.command("hug", "[person:user]", level=0)
     def hug_command(self, event, person):
         event.msg.delete()
-        message = random.choice(self.config.hug_phrases)
-        event.msg.reply(message.format(
-            a=str(event.msg.author.id),
-            b=str(person.id)
-        ))
+
+        if not person or person.id == "210118905006522369":
+            return event.msg.reply(
+                "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!"
+                    .format(a=event.author.id,)
+            ) 
+        else: 
+            message = random.choice(self.config.hug_phrases)
+            event.msg.reply(message.format(
+                a=str(event.msg.author.id),
+                b=str(person.id)
+            ))
 
     @Plugin.command("fight", "<person:user>", level=0)
     def fight_command(self, event, person):
