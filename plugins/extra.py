@@ -86,37 +86,37 @@ class ExtraPlugin(Plugin):
     #         return event.msg.reply(":ok_hand: Removed your nickname.".format(a=nick))
 
     @Plugin.command("pat", "[fluff:user]", level=0)
-def pat(self, event, fluff=None):
-    event.msg.delete()
+    def pat(self, event, fluff=None):
+        event.msg.delete()
 
-    if not fluff or fluff.id == "210118905006522369":
-        self.config.pat_ori_record += 1
-        return event.msg.reply(
-            "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
-                .format(a=event.author.id, b=self.config.pat_ori_record)
-        ) 
-    elif fluff.id == event.author.id:
-        return event.msg.reply(
-            ":negative_squared_cross_mark: You can't pat yourself, you fool."
-        )
-    else:
-        pat_amount = self.config.pat_records.get(fluff.id)
-        if not pat_amount:
-            pat_amount = 1
-            self.config.pat_records[fluff.id] = 1
-
-        self.config.pat_records[fluff.id] += 1
-
-        if self.config.pat_ping_records.get(fluff.id) or self.config.pat_ping_records.get(fluff.id) == None:
+        if not fluff or fluff.id == "210118905006522369":
+            self.config.pat_ori_record += 1
             return event.msg.reply(
-                "<@{a}> gave <@{b}> a pat! (`{c}`)"
-                    .format(a=event.author.id, b=fluff.id, c=pat_amount)
+                "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
+                    .format(a=event.author.id, b=self.config.pat_ori_record)
+            ) 
+        elif fluff.id == event.author.id:
+            return event.msg.reply(
+                ":negative_squared_cross_mark: You can't pat yourself, you fool."
             )
         else:
-            return event.msg.reply(
-                "<@{a}> gave {b} a pat! (`{c}`)"
-                    .format(a=event.author.id, b=fluff.tag, c=pat_amount)
-            )
+            pat_amount = self.config.pat_records.get(fluff.id)
+            if not pat_amount:
+                pat_amount = 1
+                self.config.pat_records[fluff.id] = 1
+
+            self.config.pat_records[fluff.id] += 1
+
+            if self.config.pat_ping_records.get(fluff.id) or self.config.pat_ping_records.get(fluff.id) == None:
+                return event.msg.reply(
+                    "<@{a}> gave <@{b}> a pat! (`{c}`)"
+                        .format(a=event.author.id, b=fluff.id, c=pat_amount)
+                )
+            else:
+                return event.msg.reply(
+                    "<@{a}> gave {b} a pat! (`{c}`)"
+                        .format(a=event.author.id, b=fluff.tag, c=pat_amount)
+                )
 
     @Plugin.command("patping", "<ping:int>", level=0)
     def patping(self, event, ping):
