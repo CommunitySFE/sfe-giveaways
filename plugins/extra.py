@@ -51,7 +51,7 @@ class ExtraPlugin(Plugin):
     def hug_command(self, event, person):
         event.msg.delete()
 
-        if not person or person.id == "210118905006522369":
+        if not person or person.id == 210118905006522369:
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!"
                     .format(a=event.author.id,)
