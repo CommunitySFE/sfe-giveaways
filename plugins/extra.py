@@ -142,7 +142,7 @@ class ExtraPlugin(Plugin):
         else:
             return event.msg.reply(":negative_squared_cross_mark: Expecting 1-2.")
 
-    @Plugin.command("poptart", "[ping:int]", "[noun:str...]", level=0, aliases=["cat"])
+    @Plugin.command("poptart", "[ping:int] [noun:str...]", aliases=["cat"], level=0)
     def poptart(self, event, ping=None, noun=str):
         """This is the poptart command - Given to Poptart for most messages in a giveaway."""
 
