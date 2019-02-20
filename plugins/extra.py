@@ -82,11 +82,7 @@ class ExtraPlugin(Plugin):
     def help(self, event):
         event.msg.reply(
             "List of Commands: https://github.com/brxxn/sfe-giveaways/wiki/Commands")
-
-    @Plugin.command("poptart", "[ping:int]", "[noun:str...]", level=0, aliases=["cat"])
-    def poptart(self, event, ping=None, noun=str):
-        """This is the poptart command - Given to Poptart for most messages in a giveaway."""
-
+        
     # @Plugin.command("nick", "[nick:string...] [member:snowflake]", level=0, aliases=["nickname", "name"])
     # def nick(self, event, nick, user):
     #     """Nickname command, as requested by Colin"""
