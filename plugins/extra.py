@@ -143,31 +143,29 @@ class ExtraPlugin(Plugin):
             return event.msg.reply(":negative_squared_cross_mark: Expecting 1-2.")
 
     @Plugin.command("poptart", "[ping:int] [noun:str...]", aliases=["cat"], level=0)
-    def poptart(self, event, ping=None, noun=None):
+    def poptart(self, event, ping=None, noun=str):
         """This is the poptart command - Given to Poptart for most messages in a giveaway."""
-
-        event.msg.delete()
 
         if ping and event.author.id == 116757237262843906:
             if ping == 1:
+            	event.msg.delete()
                 self.config.cat_should_ping = False
-                event.msg.reply(
-                    ":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
+                event.msg.reply(":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
                 return
             elif ping == 2:
+            	event.msg.delete()
                 self.config.cat_should_ping = True
-                event.msg.reply(
-                    ":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
+                event.msg.reply(":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
                 return
             elif ping == 3:
-                event.msg.delete()
                 if noun:
+                	event.msg.delete()
                     self.config.cat_noun = noun
                     event.msg.reply(":ok_hand: Noun set to {a}. Enjoy your day, you fine cat.".format(
                         a=str(self.config.cat_noun)))
                 else:
-                    event.msg.reply(
-                        ":negative_squared_cross_mark: Expecting a string.")
+                    event.msg.reply(":negative_squared_cross_mark: Expecting a string.")
+                return
             else:
                 return event.msg.reply(":negative_squared_cross_mark: Expecting 1-3.")
 
