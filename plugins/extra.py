@@ -148,18 +148,18 @@ class ExtraPlugin(Plugin):
 
         if ping and event.author.id == 116757237262843906:
             if ping == 1:
-            	event.msg.delete()
+                event.msg.delete()
                 self.config.cat_should_ping = False
                 event.msg.reply(":ok_hand: Disabled pings. Enjoy your day, you fine cat.")
                 return
             elif ping == 2:
-            	event.msg.delete()
+                event.msg.delete()
                 self.config.cat_should_ping = True
                 event.msg.reply(":ok_hand: Enabled pings. Enjoy your day, you fine cat.")
                 return
             elif ping == 3:
                 if noun:
-                	event.msg.delete()
+                    event.msg.delete()
                     self.config.cat_noun = noun
                     event.msg.reply(":ok_hand: Noun set to {a}. Enjoy your day, you fine cat.".format(
                         a=str(self.config.cat_noun)))
