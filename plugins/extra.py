@@ -47,18 +47,20 @@ class ExtraPluginConfig(Config):
     pat_records = {}
     pat_ping_records = {}
 
+
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
-    
+
     @Plugin.command("hug", "<person:user>", level=0)
     def hug_command(self, event, person):
         event.msg.delete()
 
         if not person or person.id == 210118905006522369:
             return event.msg.reply(
-                "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!".format(a=event.author.id)
-            ) 
-        else: 
+                "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!".format(
+                    a=event.author.id)
+            )
+        else:
             message = random.choice(self.config.hug_phrases)
             return event.msg.reply(message.format(
                 a=str(event.msg.author.id),
@@ -82,7 +84,7 @@ class ExtraPlugin(Plugin):
     def help(self, event):
         event.msg.reply(
             "List of Commands: https://github.com/brxxn/sfe-giveaways/wiki/Commands")
-        
+
     # @Plugin.command("nick", "[nick:string...] [member:snowflake]", level=0, aliases=["nickname", "name"])
     # def nick(self, event, nick, user):
     #     """Nickname command, as requested by Colin"""
@@ -104,8 +106,8 @@ class ExtraPlugin(Plugin):
             self.config.pat_ori_record += 1
             return event.msg.reply(
                 "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
-                    .format(a=event.author.id, b=self.config.pat_ori_record)
-            ) 
+                .format(a=event.author.id, b=self.config.pat_ori_record)
+            )
         elif fluff.id == event.author.id:
             return event.msg.reply(
                 ":negative_squared_cross_mark: You can't pat yourself, you fool."
@@ -118,15 +120,15 @@ class ExtraPlugin(Plugin):
 
             self.config.pat_records[fluff.id] += 1
 
-            if self.config.pat_ping_records.get(fluff.id) or self.config.pat_ping_records.get(fluff.id) == None:
+            if self.config.pat_ping_records.get(fluff.id) or self.config.pat_ping_records.get(fluff.id) is None:
                 return event.msg.reply(
                     "<@{a}> gave <@{b}> a pat! (`{c}`)"
-                        .format(a=event.author.id, b=fluff.id, c=pat_amount)
+                    .format(a=event.author.id, b=fluff.id, c=pat_amount)
                 )
             else:
                 return event.msg.reply(
                     "<@{a}> gave {b} a pat! (`{c}`)"
-                        .format(a=event.author.id, b=fluff.tag, c=pat_amount)
+                    .format(a=event.author.id, b=fluff.tag, c=pat_amount)
                 )
 
     @Plugin.command("patping", "<ping:int>", level=0)
@@ -140,12 +142,12 @@ class ExtraPlugin(Plugin):
         else:
             return event.msg.reply(":negative_squared_cross_mark: Expecting 1-2.")
 
-    @Plugin.command("poptart", "[ping:int]", level=0, aliases=["cat"])
-    def poptart(self, event, ping=None):
-        """This is the poptart command - Given to poptart for most messages in a giveaway."""
-        
+    @Plugin.command("poptart", "[ping:int]", "[noun:str...]", level=0, aliases=["cat"])
+    def poptart(self, event, ping=None, noun=str):
+        """This is the poptart command - Given to Poptart for most messages in a giveaway."""
+
         event.msg.delete()
-        
+
         if ping and event.author.id == 116757237262843906:
             if ping == 1:
                 self.config.cat_should_ping = False
