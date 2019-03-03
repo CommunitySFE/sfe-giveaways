@@ -45,7 +45,11 @@ class MessagesPlugin(Plugin):
 
         if event.message.author.bot:
             return
-        
+
+        # do not count messages with less than 3 words
+        if len(event.message.content.split(" ")) < 3:
+            return
+
         for handler in self.handlers:
             handler(event.message)
         
