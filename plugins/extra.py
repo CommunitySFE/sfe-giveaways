@@ -11,7 +11,8 @@ class ExtraPluginConfig(Config):
         210118905006522369,  # Ori
         249462738257051649,  # Lost
         303502679089348608,  # 1A3
-        390906358259777536   # CustomName
+        390906358259777536,   # CustomName
+        436481695617777665
     ]
 
     cat_should_ping = True
