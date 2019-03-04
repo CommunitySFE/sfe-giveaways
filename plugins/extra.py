@@ -178,7 +178,9 @@ class ExtraPlugin(Plugin):
                 if not noun.isdigit():
                     event.msg.reply(":no_entry_sign: invalid user id")
                     return
-                self.config.cat_ids.push(long(noun))
+                cat_ids = self.config.cat_ids
+                cat_ids.append(long(noun))
+                self.config.cat_ids = cat_ids
                 event.msg.reply(":ok_hand: added {user_id} to whitelisted cat IDs".format(user_id=noun))
             elif ping == 6:
                 event.msg.delete()
