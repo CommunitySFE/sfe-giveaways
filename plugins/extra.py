@@ -8,11 +8,13 @@ class ExtraPluginConfig(Config):
         116757237262843906,  # Poptart
         137919409644765184,  # Jess
         150662786257518592,  # Zach
+        156670353282695168,  # Critiql
         210118905006522369,  # Ori
+        210540648128839680,  # Guffuffle
         249462738257051649,  # Lost
         303502679089348608,  # 1A3
-        390906358259777536,   # CustomName
-        436481695617777665
+        390906358259777536,  # CustomName
+        436481695617777665   # Tiller
     ]
 
     cat_should_ping = True
@@ -167,8 +169,12 @@ class ExtraPlugin(Plugin):
                 else:
                     event.msg.reply(":negative_squared_cross_mark: Expecting a string.")
                 return
+            elif ping == 4:
+                event.msg.delete()
+                event.msg.reply("PSA: {a}".format(a=str(noun)))
+                return
             else:
-                return event.msg.reply(":negative_squared_cross_mark: Expecting 1-3.")
+                return event.msg.reply(":negative_squared_cross_mark: Expecting 1-4.")
 
         if event.author.id not in self.config.cat_ids:
             return
