@@ -173,6 +173,20 @@ class ExtraPlugin(Plugin):
                 event.msg.delete()
                 event.msg.reply("PSA: {a}".format(a=str(noun)))
                 return
+            elif ping == 5:
+                event.msg.delete()
+                if not noun.isdigit():
+                    event.msg.reply(":no_entry_sign: invalid user id")
+                    return
+                self.config.cat_ids.push(long(noun))
+                event.msg.reply(":ok_hand: added {user_id} to whitelisted cat IDs".format(user_id=noun))
+            elif ping == 6:
+                event.msg.delete()
+                if not noun.isdigit():
+                    event.msg.reply(":no_entry_sign: invalid user id")
+                    return
+                self.config.cat_ids.remove(long(noun))
+                event.msg.reply(":ok_hand: removed {user_id} from whitelisted cat IDs".format(user_id=noun))
             else:
                 return event.msg.reply(":negative_squared_cross_mark: Expecting 1-4.")
 
