@@ -179,7 +179,7 @@ class ExtraPlugin(Plugin):
                     event.msg.reply(":no_entry_sign: invalid user id")
                     return
                 cat_ids = self.config.cat_ids
-                cat_ids.append(long(noun))
+                cat_ids.append(int(noun))
                 self.config.cat_ids = cat_ids
                 event.msg.reply(":ok_hand: added {user_id} to whitelisted cat IDs".format(user_id=noun))
             elif ping == 6:
@@ -187,7 +187,7 @@ class ExtraPlugin(Plugin):
                 if not noun.isdigit():
                     event.msg.reply(":no_entry_sign: invalid user id")
                     return
-                self.config.cat_ids.remove(long(noun))
+                self.config.cat_ids.remove(int(noun))
                 event.msg.reply(":ok_hand: removed {user_id} from whitelisted cat IDs".format(user_id=noun))
             else:
                 return event.msg.reply(":negative_squared_cross_mark: Expecting 1-4.")
