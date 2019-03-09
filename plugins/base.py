@@ -316,7 +316,7 @@ class BasePlugin(Plugin):
             code = "\n".join(list(filter(lambda x : x if not x.startswith("```") else "", split_code)))
 
         try:
-            value = eval(code, {"__builtins__": None}, eval_context)
+            value = eval(code, globals(), eval_context)
         except Exception as e:
             event.msg.reply(":no_entry_sign: exception ({name}) thrown: ```python\n{exception}\n```".format(
                 exception=str(e),
