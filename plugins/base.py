@@ -296,3 +296,115 @@ class BasePlugin(Plugin):
 
         del should_blacklist
 
+    @Plugin.command("eval", "<code:str...>", level=100)
+    def evaluate_code(self, event, code="return 'error'"):
+        eval_context = {
+            "code_block": "```",
+            "plugin": self,
+            "bot": self.bot,
+            "event": event,
+            "giveaways": self.giveaways,
+            "participants": self.participants
+        }
+
+        if "token" in code.lower():
+            event.msg.reply(":no_entry_sign: not today.")
+            return
+
+        if len(code.split("\n")) != 1 and code.startswith("```"):
+            split_code = code.split("\n")
+            code = "\n".join(list(filter(lambda x : x if not x.startswith("```") else "", split_code)))
+
+        try:
+            value = eval(code, {"__builtins__": None}, eval_context)
+        except Exception as e:
+            event.msg.reply(":no_entry_sign: exception ({name}) thrown: ```python\n{exception}\n```".format(
+                exception=str(e),
+                name=type(e).__name__
+            ))
+            raise
+
+        event.msg.reply(":ok_hand: evaluated value: `{value}`".format(
+            value=str(value)
+        ))
+
+    @Plugin.command("evalsafe", "<code:str...>", level=100)
+    def evaluate_code_safely(self, event, code="return 'error'"):
+        eval_context = {
+            "code_block": "```"
+        }
+
+        if "token" in code.lower():
+            event.msg.reply(":no_entry_sign: not today.")
+            return
+
+        if len(code.split("\n")) != 1 and code.startswith("```"):
+            split_code = code.split("\n")
+            code = "\n".join(list(filter(lambda x: x if not x.startswith("```") else "", split_code)))
+
+        try:
+            value = eval(code, {"__builtins__": None}, eval_context)
+        except Exception as e:
+            event.msg.reply(":no_entry_sign: exception ({name}) thrown: ```python\n{exception}\n```".format(
+                exception=str(e),
+                name=type(e).__name__
+            ))
+            raise
+
+        event.msg.reply(":ok_hand: safely evaluated value: `{value}`".format(
+            value=str(value)
+        ))
+
+    @Plugin.command("exec", "<code:str...>", level=100)
+    def execute_code(self, event, code="return 'error'"):
+        ctx = {
+            "code_block": "```",
+            "plugin": self,
+            "bot": self.bot,
+            "event": event
+        }
+
+        if "token" in code.lower():
+            event.msg.reply(":no_entry_sign: not today.")
+            return
+
+        if len(code.split("\n")) != 1 and code.startswith("```"):
+            split_code = code.split("\n")
+            code = "\n".join(list(filter(lambda x: x if not x.startswith("```") else "", split_code)))
+
+        try:
+            exec(code, {"__builtins__": None}, ctx)
+        except Exception as e:
+            event.msg.reply(":no_entry_sign: exception ({name}) thrown: ```python\n{exception}\n```".format(
+                exception=str(e),
+                name=type(e).__name__
+            ))
+            raise
+
+        event.msg.reply(":ok_hand: successfully executed.")
+
+    @Plugin.command("execsafe", "<code:str...>", level=100)
+    def execute_code_safely(self, event, code="return 'error'"):
+        ctx = {
+            "code_block": "```"
+        }
+
+        if "token" in code.lower():
+            event.msg.reply(":no_entry_sign: not today.")
+            return
+
+        if len(code.split("\n")) != 1 and code.startswith("```"):
+            split_code = code.split("\n")
+            code = "\n".join(list(filter(lambda x: x if not x.startswith("```") else "", split_code)))
+
+        try:
+            exec(code, {"__builtins__": None}, ctx)
+        except Exception as e:
+            event.msg.reply(":no_entry_sign: exception ({name}) thrown: ```python\n{exception}\n```".format(
+                exception=str(e),
+                name=type(e).__name__
+            ))
+            raise
+
+        event.msg.reply(":ok_hand: successfully executed.")
+
