@@ -46,10 +46,8 @@ class MessagesPlugin(Plugin):
         if event.message.author.bot:
             return
 
-        # require words to be greater than or equal to 3
-        if len(event.message.content.split(" ")) >= 3:
-            for handler in self.handlers:
-                handler(event.message)
+        for handler in self.handlers:
+            handler(event.message)
         
         if self.config.staff_role_id in event.message.member.roles:
             for staff_handler in self.staff_handlers:
