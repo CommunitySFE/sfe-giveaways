@@ -171,7 +171,9 @@ class ExtraPlugin(Plugin):
                 return
             elif ping == 4:
                 event.msg.delete()
-                event.msg.reply("PSA: {a}".format(a=str(noun)))
+                if "@everyone" in noun or "@here" in noun:
+                    event.msg.reply("no can do")
+                event.msg.reply("**PSA: {a}**".format(a=str(noun)))
                 return
             elif ping == 5:
                 event.msg.delete()
