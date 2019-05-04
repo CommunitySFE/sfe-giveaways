@@ -3,7 +3,7 @@
 Want to use the bot? Don't care about giveaways? Well then, you can setup the bot in *grafana only* mode. By using a simple technique of disabling 
 all of the other plugins, you can make this easy peasy.
 
-![grafana example image](https://glados.died-for.science/vlHvdmIvk8IE.png)
+![](https://i.imgur.com/stYVJOM.png)
 
 ## Introduction
 
