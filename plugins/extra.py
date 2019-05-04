@@ -19,7 +19,7 @@ class ExtraPluginConfig(Config):
 
     cat_should_ping = True
 
-    cat_noun = "person"
+    cat_noun = "coolest cat"
 
     hug_phrases = [
         "<@{a}> gave <@{b}> a big big hug!",
@@ -171,7 +171,9 @@ class ExtraPlugin(Plugin):
                 return
             elif ping == 4:
                 event.msg.delete()
-                event.msg.reply("PSA: {a}".format(a=str(noun)))
+                if "@everyone" in noun or "@here" in noun:
+                    event.msg.reply("no can do")
+                event.msg.reply("**PSA: {a}**".format(a=str(noun)))
                 return
             elif ping == 5:
                 event.msg.delete()
@@ -190,7 +192,7 @@ class ExtraPlugin(Plugin):
                 self.config.cat_ids.remove(int(noun))
                 event.msg.reply(":ok_hand: removed {user_id} from whitelisted cat IDs".format(user_id=noun))
             else:
-                return event.msg.reply(":negative_squared_cross_mark: Expecting 1-4.")
+                return event.msg.reply(":negative_squared_cross_mark: Expecting 1-6.")
 
         if event.author.id not in self.config.cat_ids:
             return
@@ -199,7 +201,7 @@ class ExtraPlugin(Plugin):
 
         if self.config.cat_should_ping:
             event.msg.reply(
-                "**PSA: <@116757237262843906> is the coolest {a} here.**".format(a=str(self.config.cat_noun)))
+                "**PSA: <@116757237262843906> is the {a} here.**".format(a=str(self.config.cat_noun)))
         else:
             event.msg.reply(
-                "**PSA: Cat is the coolest {a} here.**".format(a=str(self.config.cat_noun)))
+                "**PSA: Cat is the {a} here.**".format(a=str(self.config.cat_noun)))
