@@ -52,7 +52,7 @@ class GrafanaPlugin(Plugin):
         member_count = len(self.client.state.guilds[self.config.master_guild_id].members)
         self.member_count_tracker.track_member_count(member_count)
 
-    @Plugin.schedule(3600, True, True)
+    @Plugin.schedule(1800, True, True)
     def track_active_members(self):
         active_members = len(self.active_members)
         self.active_member_tracker.track_active_members(active_members)

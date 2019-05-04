@@ -3,10 +3,11 @@
 Want to use the bot? Don't care about giveaways? Well then, you can setup the bot in *grafana only* mode. By using a simple technique of disabling 
 all of the other plugins, you can make this easy peasy.
 
+![grafana example image](https://glados.died-for.science/vlHvdmIvk8IE.png)
+
 ## Introduction
 
-We use a full setup over on our main Discord server, [SFE](https://discord.gg/sfe), and it allows us to track member counts and messages sent per minute. It
-can be used to determine active vs. idle times and other things like that. We will be adding more to this soon.
+We use a full setup over on our main Discord server, [SFE](https://discord.gg/sfe), and it allows us to track member counts and messages sent per minute. It can be used to determine active vs. idle times and other things like that. We will be adding more to this soon.
 
 ## Requirements
 
@@ -17,7 +18,7 @@ can be used to determine active vs. idle times and other things like that. We wi
 
 ## Install grafana
 
-You can just [go over here](https://grafana.com/grafana/download) to install grafana. Remember where you put the folder, it will be helpful later.
+You can just [go over here](https://grafana.com/grafana/download) to install grafana. Go over to the folder `bin/` inside the extracted zip. Then run `./grafana-cli plugins install grafana-piechart-panel` (or if you're on Windows, `grafana-cli.exe plugins install grafana-piechart-panel`)
 
 ## Install prometheus
 
@@ -66,11 +67,12 @@ You will need to make a folder called `config`. In this folder, put `grafana.jso
 ```json
 {
     "prometheus_port": "9091",
-    "master_guild_id": 0
+    "master_guild_id": "<put your server's ID here>",
+    "channel_blacklist": [
+      "<put a list of channel ids you don't want tracked here>"
+    ]
 }
 ```
-
-**REPLACE THE 0 WITH YOUR GUILD ID**, don't put it in quotes. It might mess something up.
 
 ## Start the bot
 
@@ -82,10 +84,7 @@ Use the `grafana-server` located in the binary files of the download (it's `graf
 
 ## The good part
 
-Go and head on over to port 3000 on your server once you've launched all the servers. Now, create an admin account. Your credentials don't really matter, as the bot doesn't
-login to Grafana directly. Go ahead and create a Prometheus data source with the URL of `http://localhost:9090`. Now, go to the Dashboards icon > Manage. Click on `Import` and
-copy the content from `grafana/template-dashboard.json` into the JSON section of the import page. Import it, and you should be good to go. If you have any questions, create an 
-issue or DM me (brxxn#1337).
+Go and head on over to port 3000 on your server in a web browser once you've launched all the servers. Now, create an admin account. Your credentials don't really matter, as the bot doesn't login to Grafana directly. Go ahead and create a Prometheus data source with the URL of `http://localhost:9090`. Now, go to the Dashboards icon > Manage. Click on `Import` and copy the content from `grafana/template-dashboard.json` into the JSON section of the import page. Import it, and you should be good to go. If you have any questions, create an issue or DM me (brxxn#1337).
 
 ## Updating
 
@@ -93,4 +92,5 @@ Currently, you are required to manually perform updates. I'm working on a CI sol
 
 ## Known Issues
 
-During downtime or when the bot is first starting up, all grafana counts are set to 0.
+* During downtime or when the bot is first starting up, all grafana counts are set to 0.
+* When you start it, active members is set to 0. I'm not fixing it, just deal with it.
