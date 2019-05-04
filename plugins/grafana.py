@@ -19,6 +19,7 @@ class GrafanaPlugin(Plugin):
         self.member_count_tracker = grafana_structs.MemberCountTracker(self.registry)
         self.message_count_tracker = grafana_structs.MessageCountTracker(self.registry)
         self.active_member_tracker = grafana_structs.ActiveMemberTracker(self.registry)
+        self.channel_usage_tracker = grafana_structs.ChannelUsageTracker(self.registry)
         self.temporary_message_count = 0
         self.active_members = []
         self.cached_member_count = 0
@@ -40,6 +41,7 @@ class GrafanaPlugin(Plugin):
         if int(message.author.id) not in self.active_members:
             self.active_members.append(message.author.id)
         self.temporary_message_count += 1
+        self.channel_usage_tracker.track_used_channel(message.channel.name)
 
     @Plugin.schedule(30, True, True)
     def log_member_count(self):

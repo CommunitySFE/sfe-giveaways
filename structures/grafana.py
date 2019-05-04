@@ -19,6 +19,17 @@ class MessageCountTracker:
         self.message_count_tracker.set(message_count)
 
 
+class ChannelUsageTracker:
+
+    def __init__(self, registry):
+        self.channel_usage_tracker = prom.Gauge("channel_usage", "track how much a channel is used",
+                                                ['channel_name'],
+                                                registry=registry)
+
+    def track_used_channel(self, channel_name):
+        self.channel_usage_tracker.labels(channel_name=channel_name).inc()
+
+
 class ActiveMemberTracker:
     """
     Tracks the amount of active members in a server.
