@@ -55,6 +55,7 @@ class BasePlugin(Plugin):
         self.giveaways = self.mongo_database.get_collection("giveaways")
         self.participants = self.mongo_database.get_collection("participants")
         self.web_tokens = self.mongo_database.get_collection("webTokens")
+        self.eval_storage = []
 
     @Plugin.command("databasestatus", level=100)
     def ping(self, event):
@@ -304,7 +305,8 @@ class BasePlugin(Plugin):
             "bot": self.bot,
             "event": event,
             "giveaways": self.giveaways,
-            "participants": self.participants
+            "participants": self.participants,
+            "eval_storage": self.eval_storage
         }
 
         if "token" in code.lower():
@@ -323,7 +325,8 @@ class BasePlugin(Plugin):
                 name=type(e).__name__
             ))
             raise
-
+        # save eval storage
+        self.eval_storage = eval_context["eval_storage"]
         event.msg.reply(":ok_hand: evaluated value: `{value}`".format(
             value=str(value)
         ))

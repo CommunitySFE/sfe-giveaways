@@ -1,6 +1,6 @@
 ---
 name: Suggestion
-about: Suggest something about the bot
+about: do the suggest thing!
 
 ---
 
