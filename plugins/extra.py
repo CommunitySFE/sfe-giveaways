@@ -103,8 +103,10 @@ class ExtraPlugin(Plugin):
 
     @Plugin.command("pingu", level=0)
     def pingu(self, event):
-        event.msg.reply(
-            ":penguin: Noot Noot! :penguin: - <@205288012165283840>")
+        if event.author.id != 173085535663947776:
+            return event.msg.reply(":penguin: Noot Noot! :penguin: - <@205288012165283840>")
+        else:   
+            return event.msg.reply(":negative_squared_cross_mark: You are not a real pingu.")
 
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
