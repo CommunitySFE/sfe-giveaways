@@ -49,6 +49,7 @@ class ExtraPluginConfig(Config):
     pat_ori_record = 4678
     pat_records = {}
     pat_ping_records = {}
+    noot_record = 0
 
 
 @Plugin.with_config(ExtraPluginConfig)
@@ -104,7 +105,9 @@ class ExtraPlugin(Plugin):
     @Plugin.command("pingu", level=0)
     def pingu(self, event):
         if event.author.id != 173085535663947776:
-            return event.msg.reply(":penguin: Noot Noot! :penguin: - <@205288012165283840>")
+            self.config.noot_record += 1
+            return event.msg.reply(":penguin: Noot Noot! :penguin: - <@205288012165283840> (`{a}`)"
+            .format(a=self.config.noot_record))
         else:   
             return event.msg.reply(":negative_squared_cross_mark: You are not a real pingu.")
 
