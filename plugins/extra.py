@@ -101,6 +101,11 @@ class ExtraPlugin(Plugin):
     #         event.member.change_nickname(event.member, None)
     #         return event.msg.reply(":ok_hand: Removed your nickname.".format(a=nick))
 
+    @Plugin.command("pingu", level=0)
+    def pingu(self, event):
+        event.msg.reply(
+            ":penguin: Noot Noot! :penguin: - <@205288012165283840>")
+
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
         event.msg.delete()
