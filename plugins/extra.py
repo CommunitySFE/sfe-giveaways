@@ -51,6 +51,11 @@ class ExtraPluginConfig(Config):
     pat_ping_records = {}
     noot_record = 0
 
+    custom_commands = [{
+        'name': 'diditworkandwhatdiditcost',
+        'content': 'yes, it did, and it cost like under 30 minutes of your time.'
+    }]
+
 
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
@@ -101,6 +106,35 @@ class ExtraPlugin(Plugin):
     #     else:
     #         event.member.change_nickname(event.member, None)
     #         return event.msg.reply(":ok_hand: Removed your nickname.".format(a=nick))
+
+    @Plugin.listen("MessageCreate")
+    def custom_command_event(self, event):
+        if event.message.guild is None:
+            return
+
+        if event.message.author.bot:
+            return
+        
+        if not event.message.content.startswith('.'):
+            return
+        
+        for command in self.config.custom_commands:
+            if command.get("name") is None or command.get("content") is None:
+                print("WARNING: Custom commands must have a name and content value.")
+                continue
+            if not event.message.content.startswith(".%s" % command.get("name")):
+                continue
+            if command.get('whitelisted_users') is not None:
+                if type(command.get('whitelisted_users')) is str:
+                    if not command.get('whitelisted_users') == 'all':
+                        break
+                else:
+                    if not event.message.author.id in command.get('whitelisted_users'):
+                        break
+            if command.get('blacklisted_users') is not None:
+                if event.message.author.id in command.get('blacklisted_users'):
+                    break
+            event.message.channel.send_message(command.get("content"))
 
     @Plugin.command("pingu", level=0)
     def pingu(self, event):
