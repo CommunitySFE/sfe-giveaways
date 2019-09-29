@@ -49,7 +49,6 @@ class ExtraPluginConfig(Config):
     pat_ori_record = 4678
     pat_records = {}
     pat_ping_records = {}
-    noot_record = 0
 
     custom_commands = [{
         'name': 'diditworkandwhatdiditcost',
@@ -135,15 +134,6 @@ class ExtraPlugin(Plugin):
                 if event.message.author.id in command.get('blacklisted_users'):
                     break
             event.message.channel.send_message(command.get("content"))
-
-    @Plugin.command("pingu", level=0)
-    def pingu(self, event):
-        if event.author.id != 173085535663947776:
-            self.config.noot_record += 1
-            return event.msg.reply(":penguin: Noot Noot! :penguin: - <@205288012165283840> (`{a}`)"
-            .format(a=self.config.noot_record))
-        else:   
-            return event.msg.reply(":negative_squared_cross_mark: You are not a real pingu.")
 
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
