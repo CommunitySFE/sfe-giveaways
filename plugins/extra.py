@@ -49,15 +49,267 @@ class ExtraPluginConfig(Config):
     pat_ori_record = 4678
     pat_records = {}
     pat_ping_records = {}
+    noot_record = 0
 
     custom_commands = [{
         'name': 'diditworkandwhatdiditcost',
         'content': 'yes, it did, and it cost like under 30 minutes of your time.'
     }]
+    donator_plus_role = 627562670303739905
 
 
 @Plugin.with_config(ExtraPluginConfig)
 class ExtraPlugin(Plugin):
+
+    def load(self, ctx):
+        super(ExtraPlugin, self).load(ctx)
+        self.base_plugin = self.bot.plugins['BasePlugin']
+        self.custom_command_db = self.base_plugin.custom_commands
+        self.custom_commands = []
+        self.reload_custom_commands()
+    
+    def reload_custom_commands(self):
+        # Reset the custom command storage
+        self.custom_commands = []
+        # Fetch active custom commands from database
+        self.custom_commands = self.base_plugin.get_active_custom_commands()
+        # print("Custom commands reloaded.")
+
+    def is_donator(self, member):
+        return self.config.donator_plus_role in member.roles
+
+    @Plugin.command("create", "<name:str...>", group="cc", level=0)
+    def create_command(self, event, name):
+        if event.msg.guild is None:
+            return
+
+        if not self.is_donator(event.msg.member):
+            event.msg.reply(':no_entry_sign: Sorry, but you must have Donator+ to use this command. Please get Donator+ at ' +
+                '<https://www.paypal.com/pools/c/8iCBNxzoRJ> to get custom command permissions for SFE.')
+            return
+
+        if len(name) <= 2:
+            event.msg.reply(':no_entry_sign: please make a longer name.')
+            return
+
+        previous_custom_command = self.custom_command_db.find_one({
+            '$or': [{
+                'name': name
+            }, {
+                'author': event.msg.author.id
+            }]
+        })
+
+        if previous_custom_command is not None:
+            event.msg.reply(':no_entry_sign: you either already have a custom command or have created a custom command before.')
+            return
+        
+        self.custom_command_db.insert_one({
+            'active': False,
+            'name': name,
+            'content': '[content not set]',
+            'author': event.msg.author.id
+        })
+
+        event.msg.reply(':ok_hand: custom command created successfully. you can change the content using `.cc setcontent <content>`')
+    
+    @Plugin.command("setcontent", "<content:str...>", group="cc", level=0)
+    def set_command_content(self, event, content):
+        if event.msg.guild is None:
+            return
+
+        if not self.is_donator(event.msg.member):
+            event.msg.reply(':no_entry_sign: Sorry, but you must have Donator+ to use this command. Please get Donator+ at ' +
+                '<https://www.paypal.com/pools/c/8iCBNxzoRJ> to get custom command permissions for SFE.')
+            return
+
+        if len(content) <= 2:
+            event.msg.reply(':no_entry_sign: you need at least 3 characters of content.')
+            return
+
+        previous_custom_command = self.custom_command_db.find_one({
+            'author': event.msg.author.id
+        })
+
+        if previous_custom_command is None:
+            event.msg.reply(':no_entry_sign: you don\'t have an inactive custom command. you can create one using `.cc create <name>`.')
+            return
+        
+        if '@everyone' in content or '@here' in content:
+            event.msg.reply(':no_entry_sign: do not attempt to mention everyone in your command content.')
+            return
+        
+        self.custom_command_db.update_one({
+            '_id': previous_custom_command['_id']
+        }, {
+            '$set': {
+                'content': content
+            }
+        })
+
+        if not previous_custom_command['active']:
+            event.msg.reply(':ok_hand: content updated. for your command to go live, you\'ll have to ask for approval.')
+        else:
+            self.reload_custom_commands()
+            event.msg.reply(':ok_hand: command content updated successfully.')
+
+    @Plugin.command('setactive', '<name:str...>', group='cc', level=100)
+    def set_command_active(self, event, name):
+        custom_command = self.custom_command_db.find_one({
+            'name': name
+        })
+
+        if custom_command is None:
+            event.msg.reply(':no_entry_sign: could not find custom command with that name.')
+            return
+        
+        self.custom_command_db.update_one({
+            '_id': custom_command['_id']
+        }, {
+            '$set': {
+                'active': True
+            }
+        })
+
+        self.reload_custom_commands()
+        
+        event.msg.reply(':ok_hand: command is now active.')
+    
+    @Plugin.command('blacklist', '<user:user>', group='cc', level=0)
+    def blacklist_user_from_command(self, event, user):
+        custom_command = self.custom_command_db.find_one({
+            'author': event.msg.author.id
+        })
+
+        if custom_command is None:
+            event.msg.reply(":no_entry_sign: you don't have a custom command.")
+            return
+        
+        blacklist = []
+
+        if custom_command.get('blacklisted_users') is not None:
+            blacklist = custom_command['blacklisted_users']
+        
+        if user.id in blacklist:
+            blacklist.remove(user.id)
+        else:
+            blacklist.append(user.id)
+
+        self.custom_command_db.update_one({
+            '_id': custom_command['_id']
+        }, {
+            '$set': {
+                'blacklisted_users': blacklist
+            }
+        })
+
+        self.reload_custom_commands()
+
+        event.msg.reply(':ok_hand: blacklist toggled for {user} (`{id}`).'.format(user=str(user), id=user.id))
+    
+    @Plugin.command('whitelist', '<user:user>', group='cc', level=0)
+    def whitelist_user_for_command(self, event, user):
+        custom_command = self.custom_command_db.find_one({
+            'author': event.msg.author.id
+        })
+
+        if custom_command is None:
+            event.msg.reply(":no_entry_sign: you don't have a custom command.")
+            return
+        
+        whitelist = []
+
+        if custom_command['whitelisted_users'] is not None:
+            if custom_command['whitelisted_users'] == 'all':
+                event.msg.reply(':no_entry_sign: whitelist is not enabled. please enable it using `.cc togglewhitelist`.')
+                return
+            whitelist = custom_command['whitelisted_users']
+        
+        if user.id in whitelist:
+            whitelist.remove(user.id)
+        else:
+            whitelist.append(user.id)
+
+        self.custom_command_db.update_one({
+            '_id': custom_command['_id']
+        }, {
+            '$set': {
+                'whitelisted_users': whitelist
+            }
+        })
+
+        self.reload_custom_commands()
+
+        event.msg.reply(':ok_hand: whitelist toggled for {user} (`{id}`).'.format(user=str(user), id=user.id))
+    
+    @Plugin.command('togglewhitelist', group='cc', level=0)
+    def toggle_command_whitelist(self, event):
+        custom_command = self.custom_command_db.find_one({
+            'author': event.msg.author.id
+        })
+
+        if custom_command is None:
+            event.msg.reply(":no_entry_sign: you don't have a custom command.")
+            return
+
+        whitelist = None
+
+        if self.custom_command_db['whitelisted']:
+            whitelist = [event.msg.author.id]
+        else:
+            whitelist = 'all'
+
+        self.custom_command_db.update_one({
+            '_id': custom_command['_id']
+        }, {
+            '$set': {
+                'whitelisted_users': whitelist
+            }
+        })
+
+        self.reload_custom_commands()
+
+        event.msg.reply(':ok_hand: whitelist successfully toggled.')
+
+    @Plugin.command('forcereload', group='cc', level=100)
+    def force_custom_command_reload(self, event):
+        self.reload_custom_commands()
+        event.msg.reply(':ok_hand: custom commands reloaded.')
+    
+    @Plugin.command('delete', group='cc', level=0)
+    def delete_custom_command(self, event):
+        custom_command = self.custom_command_db.find_one({
+            'author': event.msg.author.id
+        })
+
+        if custom_command is None:
+            event.msg.reply(":no_entry_sign: you don't have a custom command.")
+            return
+        was_active = custom_command['active']
+        self.custom_command_db.delete_one({
+            '_id': custom_command['_id']
+        })
+        if was_active:
+            self.reload_custom_commands()
+        event.msg.reply(':ok_hand: custom command removed successfully.')
+    
+    @Plugin.command('forcedelete', '<name:str...>', group='cc', level=100)
+    def force_delete_custom_command(self, event, name):
+        custom_command = self.custom_command_db.find_one({
+            'name': name
+        })
+
+        if custom_command is None:
+            event.msg.reply(":no_entry_sign: couldn't find a custom command with that name.")
+            return
+
+        was_active = custom_command['active']
+        self.custom_command_db.delete_one({
+            '_id': custom_command['_id']
+        })
+        if was_active:
+            self.reload_custom_commands()
+        event.msg.reply(':ok_hand: custom command removed successfully.')
 
     @Plugin.command("hug", "<person:user>", level=0)
     def hug_command(self, event, person):
@@ -117,7 +369,7 @@ class ExtraPlugin(Plugin):
         if not event.message.content.startswith('.'):
             return
         
-        for command in self.config.custom_commands:
+        for command in self.custom_commands:
             if command.get("name") is None or command.get("content") is None:
                 print("WARNING: Custom commands must have a name and content value.")
                 continue

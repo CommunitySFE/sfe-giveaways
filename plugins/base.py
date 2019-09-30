@@ -55,6 +55,7 @@ class BasePlugin(Plugin):
         self.giveaways = self.mongo_database.get_collection("giveaways")
         self.participants = self.mongo_database.get_collection("participants")
         self.web_tokens = self.mongo_database.get_collection("webTokens")
+        self.custom_commands = self.mongo_database.get_collection("customCommands")
         self.eval_storage = []
 
     @Plugin.command("databasestatus", level=100)
@@ -161,6 +162,15 @@ class BasePlugin(Plugin):
             return winner.user_id
         else:
             raise GiveawayResultFailure("random mode isn't enabled on this giveaway.")
+
+    def get_active_custom_commands(self):
+        custom_commands = []
+        active_command_objects = self.custom_commands.find({
+            'active': True
+        })
+        for command in active_command_objects:
+            custom_commands.append(command)
+        return custom_commands
 
     @Plugin.command("active", group="giveaway", level=0)
     def active_giveaways(self, event):
