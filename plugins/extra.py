@@ -254,7 +254,7 @@ class ExtraPlugin(Plugin):
 
         whitelist = None
 
-        if self.custom_command_db['whitelisted']:
+        if custom_command.get('whitelisted_users') is None or type(custom_command.get('whitelisted_users')) == str:
             whitelist = [event.msg.author.id]
         else:
             whitelist = 'all'
