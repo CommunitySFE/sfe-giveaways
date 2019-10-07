@@ -1,5 +1,6 @@
 from disco.bot import Plugin, Config
 import random
+import time
 
 
 class ExtraPluginConfig(Config):
@@ -66,6 +67,7 @@ class ExtraPlugin(Plugin):
         self.base_plugin = self.bot.plugins['BasePlugin']
         self.custom_command_db = self.base_plugin.custom_commands
         self.custom_commands = []
+        self.command_cooldowns = dict()
         self.reload_custom_commands()
     
     def reload_custom_commands(self):
@@ -373,7 +375,7 @@ class ExtraPlugin(Plugin):
             if command.get("name") is None or command.get("content") is None:
                 print("WARNING: Custom commands must have a name and content value.")
                 continue
-            if not event.message.content.startswith(".%s" % command.get("name")):
+            if not event.message.content.lower().startswith(".%s" % command.get("name").lower()):
                 continue
             if command.get('whitelisted_users') is not None:
                 if type(command.get('whitelisted_users')) is str:
@@ -385,7 +387,25 @@ class ExtraPlugin(Plugin):
             if command.get('blacklisted_users') is not None:
                 if event.message.author.id in command.get('blacklisted_users'):
                     break
-            event.message.channel.send_message(command.get("content"))
+            content = command.get("content")
+            command_name_length = len(command.get("name").split(" "))
+            split_command = event.message.content.split(" ")
+            for i in range(command_name_length - 1, len(split_command)):
+                if '@everyone' in split_command[i] or '@here' in split_command[i]:
+                    event.message.reply(":no_entry_sign: cannot mention everyone/here in command arguments.")
+                    return
+                content = content.replace("${%s}" % (i), split_command[i])
+            if '${...}' in content:
+                split_command.pop(0)
+                content = content.replace('${...}', ' '.join(split_command))
+                if '@everyone' in content or '@here' in content:
+                    event.message.reply(":no_entry_sign: cannot mention everyone/here in command arguments.")
+                    return
+            if self.command_cooldowns.get(command.get('name'), 0) + 20 > time.time():
+                event.message.add_reaction('⏱')
+                return
+            self.command_cooldowns[command.get('name')] = time.time()
+            event.message.channel.send_message(content)
 
     @Plugin.command("pat", "[fluff:user]", level=0)
     def pat(self, event, fluff=None):
