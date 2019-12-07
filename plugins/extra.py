@@ -382,10 +382,10 @@ class ExtraPlugin(Plugin):
                     if not command.get('whitelisted_users') == 'all':
                         break
                 else:
-                    if not event.message.author.id in command.get('whitelisted_users'):
+                    if not event.message.author.id in command.get('whitelisted_users') and not event.message.member.permissions.can("ADMINISTRATOR"):
                         break
             if command.get('blacklisted_users') is not None:
-                if event.message.author.id in command.get('blacklisted_users'):
+                if event.message.author.id in command.get('blacklisted_users') and not event.message.member.permissions.can("ADMINISTRATOR"):
                     break
             content = command.get("content")
             command_name_length = len(command.get("name").split(" "))

@@ -17,11 +17,11 @@ def get_level(bot, actor):
         return -1
 
     if actor.guild.id == MASTER_GUILD_ID:
-        if GIVEAWAY_ROLE_ID in actor.roles:
+        if GIVEAWAY_ROLE_ID in actor.roles or actor.permissions.can("ADMINISTRATOR"):
             return CommandLevels.ADMIN
         return CommandLevels.DEFAULT
     elif actor.guild.id == STAFF_GUILD_ID:
-        if STAFF_GIVEAWAY_ROLE_ID in actor.roles:
+        if STAFF_GIVEAWAY_ROLE_ID in actor.roles or actor.permissions.can("ADMINISTRATOR"):
             return CommandLevels.ADMIN
         return CommandLevels.DEFAULT
     else:
