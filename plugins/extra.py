@@ -319,7 +319,7 @@ class ExtraPlugin(Plugin):
 
         if not person:
             return event.msg.reply(
-                "<@{a}> tried to hug nobody, but the ***V O I D*** was unable to do anything, and could only stare back in return.".format(
+                "<@{a}> tried to hug nobody, but the **V O I D** was unable to do anything, and could only stare back in return.".format(
                     a=event.author.id)
             )
 
@@ -415,7 +415,7 @@ class ExtraPlugin(Plugin):
         if not fluff:
             self.config.pat_dissipation_count += 1
             return event.msg.reply(
-                "<@{a}> tried to give nobody a pat, but the energy was dissipated into the ***V O I D.*** (`{b}` wasted pats)"
+                "<@{a}> tried to give nobody a pat, but the energy was dissipated into the **V O I D.** (`{b}` wasted pats)"
                 .format(a=event.author.id, b=self.config.pat_dissipation_count)
             )
     
