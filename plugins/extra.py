@@ -313,7 +313,7 @@ class ExtraPlugin(Plugin):
             self.reload_custom_commands()
         event.msg.reply(':ok_hand: custom command removed successfully.')
 
-    @Plugin.command("hug", "<person:user>", level=0)
+    @Plugin.command("hug", "[person:user]", level=0)
     def hug_command(self, event, person):
         event.msg.delete()
 
