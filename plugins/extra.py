@@ -47,7 +47,7 @@ class ExtraPluginConfig(Config):
         "<@{a}> used 'chat flood'. It wasn't very effective, so <@{b}> muted them."
     ]
 
-    pat_ori_record = 4678
+    pat_dissipation_count = 0
     pat_records = {}
     pat_ping_records = {}
     noot_record = 0
@@ -317,11 +317,12 @@ class ExtraPlugin(Plugin):
     def hug_command(self, event, person):
         event.msg.delete()
 
-        if not person or person.id == 210118905006522369:
+        if not person:
             return event.msg.reply(
-                "<@{a}> gave SFE's mascot, <@210118905006522369>, a hug!".format(
+                "<@{a}> tried to hug nobody, but the ***V O I D*** was unable to do anything, and could only stare back in return.".format(
                     a=event.author.id)
             )
+
         else:
             message = random.choice(self.config.hug_phrases)
             return event.msg.reply(message.format(
@@ -411,12 +412,13 @@ class ExtraPlugin(Plugin):
     def pat(self, event, fluff=None):
         event.msg.delete()
 
-        if not fluff or fluff.id == 210118905006522369:
-            self.config.pat_ori_record += 1
+        if not fluff:
+            self.config.pat_dissipation_count += 1
             return event.msg.reply(
-                "<@{a}> gave SFE's mascot, <@210118905006522369>, a pat! (`{b}`)"
-                .format(a=event.author.id, b=self.config.pat_ori_record)
+                "<@{a}> tried to give nobody a pat, but the energy was dissipated into the ***V O I D.*** (`{b}` wasted pats)"
+                .format(a=event.author.id, b=self.config.pat_dissipation_count)
             )
+    
         elif fluff.id == event.author.id:
             return event.msg.reply(
                 ":negative_squared_cross_mark: You can't pat yourself, you fool."
