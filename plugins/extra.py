@@ -186,6 +186,10 @@ class ExtraPlugin(Plugin):
         if custom_command is None:
             event.msg.reply(":no_entry_sign: you don't have a custom command.")
             return
+
+        if custom_command['author'] == user.id:
+            event.msg.reply(":no_entry_sign: you cannot blacklist yourself.")
+            return
         
         blacklist = []
 
@@ -217,6 +221,10 @@ class ExtraPlugin(Plugin):
 
         if custom_command is None:
             event.msg.reply(":no_entry_sign: you don't have a custom command.")
+            return
+        
+        if custom_command['author'] == user.id:
+            event.msg.reply(":no_entry_sign: you cannot whitelist yourself.")
             return
         
         whitelist = []
