@@ -14,7 +14,6 @@ class ExtraPluginConfig(Config):
         210540648128839680,  # Guffuffle
         249462738257051649,  # Lost
         303502679089348608,  # 1A3
-        390906358259777536,  # CustomName
         436481695617777665   # Tiller
     ]
 
@@ -40,7 +39,7 @@ class ExtraPluginConfig(Config):
         "<@{a}> tried to dab on <@{b}> but they tripped, fell over, and now they need @ someone",
         "<@{b}> was saved from <@{a}> by wumpus' energy!",
         "Dabbit dabbed on <@{b}> from a request by <@{a}>!",
-        "CustomName banned <@{a}> for picking a fight with <@{b}>!",
+        "Jet banned <@{a}> for picking a fight with <@{b}>!",
         "<@{a}> joined the game.\n<@{a}>: That's not very cash money of you.\n<@{b}>: What\nCONSOLE: <@{b}> was banned by an operator.\n<@{b}> left the game.",
         "<@{b}> tied <@{a}>’s shoelaces together, causing them to fall over.",
         "You are the Chosen One <@{a}>. You have brought balance to this world. Stay on this path, and you will do it again for the galaxy. But beware your heart said master <@{b}>",
